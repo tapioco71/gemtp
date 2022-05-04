@@ -52,7 +52,7 @@ subroutine over54
   !  go to (6151 , 6152, 6153, 6154, 6155, 6156, 6157, 6158, 6159, 6160, 6161 , 6162, 6163, 6164, 6165, 6166, 6167, 6168, 6169, 6170, 6171 , 6172, 6173, 6174, 6175, 6176, 6177, 6178, 6179, 6180, 6181 , 6182, 6183, 6184, 6185, 6186, 6187, 6188, 6189, 6190, 6191 , 6192, 6193, 6194, 6195, 6196, 6197, 6198, 6199, 6200), n1
   select case (n1)
   case (1)
-6151 write (unit = lunit(6), fmt = 7151)
+     write (unit = lunit(6), fmt = 7151)
 7151 format (5x, "The present data case has a positive parameter  'nenerg'  (read from columns 65-72 of the floating-point",/, &
           5x, "miscellaneous data card), indicating that random switch closing times for  'statistics'  switches are to be",/, &
           5x, "generated.   Since parameter  'isw'  was punched with the key request value  '4444' ,   Only an analysis of the",/, &
@@ -74,7 +74,7 @@ subroutine over54
      go to 6220
 
   case (2)
-6152 write (unit = lunit(6), fmt = 7152)  lstat(14)
+     write (unit = lunit(6), fmt = 7152)  lstat(14)
 7152 format (5x, 'execution of the line constants program can not be allowed to continue, due to a shortage of core storage for',/, &
           5x, 'use as tabular working space.   The EMTP is variably-dimensioned, of course, with the present size of   /label/',/, &
           5x, 'simply insufficient to allow for even the solution of a single-conductor problem.   Available dimensioned working',/, &
@@ -86,7 +86,7 @@ subroutine over54
      go to 6220
 
   case (3)
-6153 write (unit = lunit(6), fmt = 7153)  bus1
+     write (unit = lunit(6), fmt = 7153)  bus1
 7153 format (5x, 'As part of the tacs data which has now been completely read by the EMTP, the user has employed the same six-',/, &
           5x, 'character alphanumeric name  ', "'", a6,  "'", '  for two different tacs variables.   Unfortunately for the user,',/, &
           5x, 'homographs are to be exiled for life from the EMTP world.   Yet should this succinct characterization be less',/, &
@@ -97,7 +97,7 @@ subroutine over54
      go to 6220
 
   case (4)
-6154 write (unit = lunit(6), fmt = 7154)
+     write (unit = lunit(6), fmt = 7154)
 7154 format (5x, "The EMTP has been inputting data for a  'Semlyen setup'  case, and has discovered an inconsistency or",/, &
           5x, 'illegality in the numerical values which were punched by the user.   Specifically, ')
      write (unit = lunit(6), fmt = 7254)  lstat(13), lstat(14)
@@ -107,7 +107,7 @@ subroutine over54
      go to 6220
 
   case (5)
-6155 write (unit = lunit(6), fmt = 7155)   lstat(13), lstat(14)
+     write (unit = lunit(6), fmt = 7155)   lstat(13), lstat(14)
 7155 format (5x, "Within the computations for a  'semlyen setup'  data case, the iterative procedure which is used for fitting",/, &
           5x, 'the characteristic-admittance step-response has failed to converge.   This fitting is done by means of an',/, &
           5x, 'algebraic adjustment in the frequency domain, not the more well-known fitting of exponentials in the time domain.',/, &
@@ -121,7 +121,7 @@ subroutine over54
      go to 6220
 
   case (6)
-6156 write (unit = lunit(6), fmt = 7156) lstat(14)
+     write (unit = lunit(6), fmt = 7156) lstat(14)
 7156 format (5x, "The present   'Semlyen setup'   data case has proven to be too much for the EMTP logic, for mode number",  i4, ' . ')
      if (lstat(19) .eq. 40080) go to 7556
      if (lstat(19) .eq. 4545 .or. lstat(19) .eq. 4557) go to 7956
@@ -166,7 +166,7 @@ subroutine over54
      go to 6220
 
   case (7)
-6157 write (unit = lunit(6), fmt = 7157)
+     write (unit = lunit(6), fmt = 7157)
 7157 format (5x, "The 'Semlyen setup'  data case now under consideration requires that modal step responses be computed first,",/, &
           5x, 'by inverse fourier transformation.   This procedure has now been completed. ')
      if (lstat(14) .eq. 0) go to 7457
@@ -185,7 +185,7 @@ subroutine over54
      go to 6220
 
   case (8)
-6158 write (unit = lunit(6), fmt = 7158)
+     write (unit = lunit(6), fmt = 7158)
 7158 format (5x, "The data case under study involves the conversion of EMTP data cards for a saturable  'transformer'  to",/, &
           5x, "(r), (l)  format (type-51, 52, ... ).   This is a feature of supporting routine  'xformer' .   But there is",/, &
           5x, "trouble with the user's  'transformer'  data which is now being read.   Specifically, ... ")
@@ -202,12 +202,12 @@ subroutine over54
      go to 6220
 
   case (9)
-6159 write (unit = lunit(6), fmt = 7159)  kill
+     write (unit = lunit(6), fmt = 7159)  kill
 7159 format(5x, 'invalid kill code =', i5)
      go  to  6220
 
   case (10)
-6160 write (unit = lunit(6), fmt = 7160)  lstat(14)
+     write (unit = lunit(6), fmt = 7160)  lstat(14)
 7160 format(5x, 'The frequency card containing the number of decades and the number of frequencies per decade',/, &
           5x, 'ik and ips respectively, for the inverse Fourier transform',/, &
           5x, 'has requested a total number of frequencies greater than the available storage of ', i5,/, &
@@ -215,7 +215,7 @@ subroutine over54
      go to 6220
 
   case (11)
-6161 write (unit = lunit(6), fmt = 7161)
+     write (unit = lunit(6), fmt = 7161)
 7161 format (5x, " The last-read data card bears the special request word  'transformer '   in columns  3-14, and is the first",/, &
           5x, 'of several cards used to define a saturable transformer component.   But the user has failed to punch columns',/, &
           5x, "39-44  (field  'bustop' )   with a non-blank 6-character (a6) alphanumeric name.   This is the node name for the",/, &
@@ -227,7 +227,7 @@ subroutine over54
      go to 6220
 
   case (12)
-6162 write (unit = lunit(6), fmt = 7162)  ipunch
+     write (unit = lunit(6), fmt = 7162)  ipunch
 7162 format (5x, "The user is running a  'line constants'  derivation in which the EMTP automatically loops over the different",/, &
           5x, 'frequencies of interest.   On the frequency card which requested this mode of program execution, the field for',/, &
           5x, "EMTP variable  'ipunch'  (columns  66-68 ,   read using i3  format)  contains an illegal numerical value.",/, &
@@ -237,7 +237,7 @@ subroutine over54
      go to 6220
 
   case(13)
-6163 write (unit = lunit(6), fmt = 7163)  lstat(14)
+     write (unit = lunit(6), fmt = 7163)  lstat(14)
 7163 format (5x,  'The last-read data card is for a tacs source of type', i5,  ' (type code as read from columns 1-2 of the source',/, &
           5x, "card).   But no valid EMTP electric-network node names were specified by the user on either a preceding   'tacs",/, &
           5x, "EMTP sources'   card,  or on a preceding   'tacs outputs' card.   Hence the EMTP concludes that there is no",/, &
@@ -249,19 +249,19 @@ subroutine over54
      go to 6220
 
   case (14)
-6164 write (unit = lunit(6), fmt = 7164)
+     write (unit = lunit(6), fmt = 7164)
 7164 format (5x, '  Unused.     ')
      go to 6220
 
   case (15)
-6165 write (unit = lunit(6), fmt = 7165)
+     write (unit = lunit(6), fmt = 7165)
 7165 format(5x, 'During calculation of eigenvalues and eigenvectors by the power method, ',/, &
           5x, 'the iteration count has exceeded "nieig".  This limit and the corresponding tolerance "epseig"',/, &
           5x, 'may be changed by a "tolerances" card. ')
      go to 6220
 
   case (16)
-6166 write (unit = lunit(6), fmt = 7166)  csepar, chcont
+     write (unit = lunit(6), fmt = 7166)  csepar, chcont
 7166 format (5x, 'The last-read data card is assumed by the EMTP to have free-format data on it, due to the presence of one or',/, &
           5x, 'more separator characters  ',  "'", a1, "'", '  or  continuation-card characters  ',  "'", a1, "'",  ' .   Well, EMTP control was within module',/, &
           5x, "'frefld'  of utpf overlay  (main00, -1)  when the data ran out.   That is, control was looking for more data items ")
@@ -272,7 +272,7 @@ subroutine over54
      go to 6220
 
   case (17)
-6167 n1 = iabs (lstat(14))
+     n1 = iabs (lstat(14))
      write (unit = lunit(6), fmt = 7167)  branch, bus4, n1
 7167 format (5x,  "The last-read data card has the  'bus3'  field of columns  15-20  punched with   ",  "'", a6,  "'", ' ,   so that the',/, &
           5x, "'bus4'  field of columns  21-26  is to be the name of the branch.   But the 6-character text used for this name,",/, &
@@ -284,11 +284,11 @@ subroutine over54
      go to 6220
 
   case (18)
-6168 write (unit = lunit(6), fmt = 7168)
+     write (unit = lunit(6), fmt = 7168)
 7168 format (' Unused.')
-16169 write (unit = lunit(6), fmt = 17169)
+     write (unit = lunit(6), fmt = 17169)
 17169 format (' Unused.')
-26170 write (unit = lunit(6), fmt = 27170) lstat(14)
+     write (unit = lunit(6), fmt = 27170) lstat(14)
 27170 format (5x, "The last-read data card is a  'line constants'  frequency card which belongs to the interior data of another",/, &
            5x, "EMTP supporting program (e.g.,  'Semlyen setup' ).   But the EMTP limit on such individually-specified frequencies",/, &
            5x, 'is',  i5,  ' ,   which has been overflowed by the last-read data card.   Dimensioning of the crucial arrays in',/, &
@@ -297,9 +297,9 @@ subroutine over54
      go to 6220
 
   case (19)
-6169 write (unit = lunit(6), fmt = 7169)
+     write (unit = lunit(6), fmt = 7169)
 7169 format (' Unused.')
-36170 write (unit = lunit(6), fmt = 37170)  lstat(14)
+     write (unit = lunit(6), fmt = 37170)  lstat(14)
 37170 format (5x, "The last-read data card is a  'line constants'  frequency card which belongs to the interior data of another",/, &
            5x, "EMTP supporting program (e.g.,  'Semlyen setup' ).   But the EMTP limit on such individually-specified frequencies",/, &
            5x, 'is',  i5,  ' ,   which has been overflowed by the last-read data card.   Dimensioning of the crucial arrays in',/, &
@@ -308,7 +308,7 @@ subroutine over54
      go to 6220
 
   case (20)
-6170 write (unit = lunit(6), fmt = 7170)  lstat(14)
+     write (unit = lunit(6), fmt = 7170)  lstat(14)
 7170 format (5x, "The last-read data card is a  'line constants'  frequency card which belongs to the interior data of another",/, &
           5x, "EMTP supporting program (e.g.,  'Semlyen setup' ).   But the EMTP limit on such individually-specified frequencies",/, &
           5x, 'is',  i5,  ' ,   which has been overflowed by the last-read data card.   Dimensioning of the crucial arrays in',/, &
@@ -317,14 +317,14 @@ subroutine over54
      go to 6220
 
   case (21)
-6171 write (unit = lunit(6), fmt = 7171)  xopt, copt
+     write (unit = lunit(6), fmt = 7171)  xopt, copt
 7171 format (5x, 'The branch card now being processed represents a request for semlyen recursive convolution modeling.   But',/, &
           5x, "the user specified floating-point miscellaneous data parameters  'xopt'  and  'copt'  as",    e13.4,  '   and',/, &
           5x,    e13.4,  ' ,   respectively.   This is illegal.   Both parameters must be equal, and also nonzero. ')
      go to 6220
 
   case (22)
-6172 write (unit = lunit(6), fmt = 7172)
+     write (unit = lunit(6), fmt = 7172)
 7172 format (5x, "The EMTP has been reading data within the  'cable constants'  supporting program, with the last-read data card",/, &
           5x, 'being the miscellaneous data card of a new case.   But the numbers punched hereupon are inconsistent.   Specifically, ')
      write (unit = lunit(6), fmt = 7272)  lstat(14)
@@ -334,7 +334,7 @@ subroutine over54
      go to 6220
 
   case (23)
-6173 write (unit = lunit(6), fmt = 7172)
+     write (unit = lunit(6), fmt = 7172)
      write (unit = lunit(6), fmt = 7173)
 7173 format (5x, "field  'isyst'  of columns  6  through  10  has been punched with the integer value  -1 ,   which means that",/, &
           5x, "an underground cable system is to be under consideration.   but field  'iearth'  of columns  16  through  20",/, &
@@ -344,7 +344,7 @@ subroutine over54
      go to 6220
 
   case (24)
-6174 write (unit = lunit(6), fmt = 7174)
+     write (unit = lunit(6), fmt = 7174)
 7174 format (5x, "All conductor cards of an overhead-line case within the  'cable constants'  supporting program have now been",/, &
           5x, 'read.   But one or more of these cards has been punched with illegal or inconsistent data.   Specifically, ')
      n1 = 3 * lstat(14) - 1
@@ -356,7 +356,7 @@ subroutine over54
      go to 6220
 
   case (25)
-6175 write (unit = lunit(6), fmt = 7175)  lstat(15), flstat(14)
+     write (unit = lunit(6), fmt = 7175)  lstat(15), flstat(14)
 7175 format (5x, "Subroutine  'eigen'  is used to calculate eigenvalues of the   (z)(y)   matrix product, within the  'cable",/, &
           5x,  "constants'  supporting program.   But within the iteration limit of",  i5,   ' ,   the iterative algorithm has',/, &
           5x,  'failed to satisfy the convergence tolerance of', e14.2,  ' .    The resulting eigenvalues must be',/, &
@@ -364,7 +364,7 @@ subroutine over54
      go to 6220
 
   case (26)
-6176 write (unit = lunit(6), fmt = 7176)
+     write (unit = lunit(6), fmt = 7176)
 7176 format(5x, 'Error is in synchronous machine electrical data.',/, &
           5x,  'data has one or more of the following errors' ,/, &
           10x, '1. xl not smallest reactance ',/, 10x, '2. xdpp not smaller than xdp ',/, &
@@ -373,7 +373,7 @@ subroutine over54
      go to 6220
 
   case (27)
-6177 write (unit = lunit(6), fmt = 7177)  numsm
+     write (unit = lunit(6), fmt = 7177)  numsm
 7177 format (5x, 'The EMTP is presently in the process of reading EMTP source cards, with the last-read card producing a',/, &
           5x, 'violation of the ordering restriction which is applicable when dynamic synchronous machine (s.m.) source',/, &
           5x, 'components are present.   Recall that all non-s.m. source cards must precede any s.m. source cards, in order of',/, &
@@ -386,7 +386,7 @@ subroutine over54
      go to 6220
 
   case (28)
-6178 write (unit = lunit(6), fmt = 7178)  lstat(14)
+     write (unit = lunit(6), fmt = 7178)  lstat(14)
 7178 format (5x, 'The EMTP is presently inputting source components, with the last-read data card serving to define the network',/, &
           5x, 'connection for the third and final phase of a 3-phase dynamic synchronous machine (s.m.) component.   But the',/, &
           5x, "source type-code for this component is illegal (unrecognizable).   From the field  'itype'  (columns 1-2) of",/, &
@@ -399,7 +399,7 @@ subroutine over54
      go to 6220
 
   case (29)
-6179 write (unit = lunit(6), fmt = 7179)
+     write (unit = lunit(6), fmt = 7179)
 7179 format (5x, 'The data case under consideration has too many output quantities for the present EMTP table sizes.   This is',/, &
           5x, 'really an overflow of EMTP list number  11 ,   though not due to conventional EMTP electric-network branch or',/, &
           5x, 'node quantities.   Rather, it is the added burden of dynamic synchronous machine (s.m.) output variables, plus',/, &
@@ -422,19 +422,19 @@ subroutine over54
      go to 99999
 
   case (30)
-6180 write (unit = lunit(6), fmt = 7180) lstat(16), lstat(17)
+     write (unit = lunit(6), fmt = 7180) lstat(16), lstat(17)
 7180 format(5x, "The size of array 'voltbc', defined in blkcom to be", i6, ',', 3x, 'is not adequate for the use of that array in the', /, &
           5x, 'processing of output requests for the type 59 s.m.  a minimum of', i5, 3x, 'cells is required. ')
      go  to  6220
 
   case (31)
-6181 write (unit = lunit(6), fmt = 7181) lstat(15), lstat(16), lstat(16)
+     write (unit = lunit(6), fmt = 7181) lstat(15), lstat(16), lstat(16)
 7181 format(5x, 'inconsistency discoverd on one of the mass cards .   The specified mass no. was', i5, '.', 3x, 'for a s.m. with', i5, '  masses', /, &
           5x, 'allowable range is between     1   and', i5, '  masses. ')
      go  to  6220
 
   case (32)
-6182 write (unit = lunit(6), fmt = 7154)
+     write (unit = lunit(6), fmt = 7154)
      write (unit = lunit(6), fmt = 7182)  lstat(14), lstat(15)
 7182 format (5x, 'The number of frequency cards which are present in the previously-read line-constants data is incorrect.',/, &
           5x, 'before the one which requests an automatic looping over logarithmically-spaced frequencies, there were', i4, /, &
@@ -446,7 +446,7 @@ subroutine over54
      go to 6220
 
   case (33)
-6183 j = lstat(13)
+     j = lstat(13)
      write (unit = lunit(6), fmt = 7154)
      write (unit = lunit(6), fmt = 7183)  volti(j), j, ci1
 7183 format (5x, 'The frequency cards which are present in the previously-read line-constants data are not all consistent.',/, &
@@ -456,7 +456,7 @@ subroutine over54
      go to 6220
 
   case (34)
-6184 write (unit = lunit(6), fmt = 7154)
+     write (unit = lunit(6), fmt = 7154)
      write (unit = lunit(6), fmt = 7184)   lstat(13)
 7184 format (5x, "The previously-read line-constants data cards are illegally-structured for usage with  'Semlyen setup' .",/, &
           5x, 'first, there should be the line-conductor cards, terminated by a blank card.   Then come the frequency cards,',/, &
@@ -465,14 +465,14 @@ subroutine over54
      go to 6220
 
   case (35)
-6185 write (unit = lunit(6), fmt = 7154)
+     write (unit = lunit(6), fmt = 7154)
      write (unit = lunit(6), fmt = 7185)   lstat(13), lstat(14)
 7185 format (5x, 'The EMTP has previously read a value of',  i6, '   (decimal) for the miscellaneous data parameter',/, &
           5x,  "'iotx'  which controls printout.   But this exceeds the legal meaningful limit of",  i6,  '  (decimal). ')
      go to 6220
 
   case (36)
-6186 write (unit = lunit(6), fmt = 7154)
+     write (unit = lunit(6), fmt = 7154)
      write (unit = lunit(6), fmt = 7186)  voltbc(1), voltk(icheck)
 7186 format (5x, "for purposes of  'Semlyen setup'  usage, the frequencies for which line constants have just been calculated",/, &
           5x, 'are inappropriate.   Recall that within the line-constants data, the frequency card for logarithmic looping over',/, &
@@ -482,7 +482,7 @@ subroutine over54
      go to 6220
 
   case (37)
-6187 write (unit = lunit(6), fmt = 7187)  bus3, bus4, bus5
+     write (unit = lunit(6), fmt = 7187)  bus3, bus4, bus5
 7187 format (5x, "The last-read data card belongs to a  'Semlyen setup'  data case, but is not what the EMTP was expecting.",/, &
           5x, 'Following the first semlyen miscellaneous data card, the user must supply a card which bears either the text',/, &
           5x, " 'line constants'   or the text   'cable constants' ,   punched in columns one onward.   not so for the user's ",/, &
@@ -492,7 +492,7 @@ subroutine over54
      go to 6220
 
   case (38)
-6188 d1 = flstat(13) / twopi
+     d1 = flstat(13) / twopi
      d2 = flstat(15) / twopi
      write (unit = lunit(6), fmt = 7154)
      write (unit = lunit(6), fmt = 7188)  d1, flstat(14)
@@ -508,7 +508,7 @@ subroutine over54
      go to 6220
 
   case (39)
-6189 write (unit = lunit(6), fmt = 7189)  lstat(15)
+     write (unit = lunit(6), fmt = 7189)  lstat(15)
 7189 format (5x, 'The EMTP data case now being processed makes use of the tacs modeling capability, all data cards for which',/, &
           5x, 'have now been read.   as the preceding printout shows, the vector of tacs variable names has repeated entries.',/, &
           5x, 'There are',  i4,   '   such conflicts.   The trouble can be traced back to the definition of tacs function blocks,',/, &
@@ -521,7 +521,7 @@ subroutine over54
      go to 6220
 
   case (40)
-6190 write (unit = lunit(6), fmt = 7190)  lstat(14), bus6
+     write (unit = lunit(6), fmt = 7190)  lstat(14), bus6
 7190 format (5x, 'The EMTP has been reading data cards which define a dynamic synchronous machine (s.m.) component.   The last-',/, &
           5x, "read card follows the s.m. output-request card, and precedes the  'finish'  card|   having columns 1-2 punched",/, &
           5x, 'with  ', "'", i2, "'",  ' ,   this card represents a request that the machine be controlled by tacs.    But either the a-6',/, &
@@ -535,7 +535,7 @@ subroutine over54
      go to 6220
 
   case (41)
-6191 write (unit = lunit(6), fmt = 7191)
+     write (unit = lunit(6), fmt = 7191)
 7191 format (5x, "The EMTP finds the user's data case to be obnoxiously degenerate, and refuses to continue with the simulation.",/, &
           5x, 'The electric network has no sources and no dynamic synchronous machines, so only a natural (unforced) solution',/, &
           5x, 'is called for.   But the user has failed to input any non zero initial conditions.   Hence the solution will be',/, &
@@ -543,7 +543,7 @@ subroutine over54
      go to 6220
 
   case (42)
-6192 write (unit = lunit(6), fmt = 7192)
+     write (unit = lunit(6), fmt = 7192)
 7192 format (5x, 'During the list-building operation which is required for connectivity output, the temporary working vectors',/, &
           5x, 'of list 99 which are used have overflowed.   The proper solution is to redimension the EMTP, though removal of',/, &
           5x, "the '1'-punch in field  'idoubl'  of the integer miscellaneous data card will bypass the present complication.",/, &
@@ -554,7 +554,7 @@ subroutine over54
      go to 6220
 
   case (43)
-6193 write (unit = lunit(6), fmt = 7193)  fminfs
+     write (unit = lunit(6), fmt = 7193)  fminfs
 7193 format (5x, "The last-read data card bears the key word   'frequency scan'   in columns 1-14.   This is a request for the",/, &
           5x, 'automatic looping over steady-state phasor solutions only, as the source frequency is methodically increased.',/, &
           5x, 'a beginning frequency of',    e15.4,      "   was read from the  'fmin'  field of columns 25-32 using  e8.0",/, &
@@ -568,7 +568,7 @@ subroutine over54
      go to 6220
 
   case (44)
-6194 write (unit = lunit(6), fmt = 7194)  kconst, lstat(13), lstat(14)
+     write (unit = lunit(6), fmt = 7194)  kconst, lstat(13), lstat(14)
 7194 format (5x, "The data case now being read in includes a request for the  'frequency scan'  feature.   but the source",/, &
           5x, 'data is inconsistent with this intended usage.   To be legal, there must be at least one type-14 EMTP source',/, &
           5x, 'component which is present during the steady-state phasor network solutions (as requested by punching data field',/, &
@@ -577,7 +577,7 @@ subroutine over54
      go to 6220
 
   case (45)
-6195 write (unit = lunit(6), fmt = 7195)  lstat(14), lstat(15)
+     write (unit = lunit(6), fmt = 7195)  lstat(14), lstat(15)
 7195 format (5x, 'The EMTP is in the process of inputting branch cards for a transmission circuit which is modeled using',/, &
           5x, 'Ametani linear convolution.   The last-read data card contains parameters for mode number',  i5,   ' .    but',/, &
           5x, 'the integer which was read from columns  73-74  using  i2 format is   ',  "'", i2,  "'", ' .    This is the number of',/, &
@@ -586,14 +586,14 @@ subroutine over54
      go to 6220
 
   case (46)
-6196 write (unit = lunit(6), fmt = 7196)
+     write (unit = lunit(6), fmt = 7196)
 7196 format (5x, "EMTP control is now in the   'Ametani setup'   supporting routine, ready to transfer to either   'cable",/, &
           5x, "constants'   or   'line constants' .    But the last-read data card does not bear one of these key words on it,",/, &
           5x, 'beginning in column number  1 . ')
      go to 6220
 
   case (47)
-6197 write (unit = lunit(6), fmt = 7197)   deltat, flstat(14)
+     write (unit = lunit(6), fmt = 7197)   deltat, flstat(14)
 7197 format (5x, 'The EMTP is now inputting data for a transmission circuit that is being modeled using',/, &
           5x, "frequency dependent representation.  But for this data, the present time-step size  'deltat'  of", e15.4, ' sec    is',/, &
           5x,  'too large.   The  travel time of the current mode is equal to', e15.4,  " sec ,    which must exceed  'deltat' .   The",/, &
@@ -601,7 +601,7 @@ subroutine over54
      go to 6220
 
   case (48)
-6198 write (unit = lunit(6), fmt = 7198)  lstat(16), lstat(15)
+     write (unit = lunit(6), fmt = 7198)  lstat(16), lstat(15)
 7198 format (5x, "The EMTP is in the middle of solving a    'Semlyen setup'    data case, at which point it has been discovered",/, &
           5x, "that insufficient working space exists.    The   'line constants'   or   'cable constants'   calculation has now",/, &
           5x,  'been successfully completed, and a minimum working space of',  i7, '    floating-point cells is now a known',/, &
@@ -613,7 +613,7 @@ subroutine over54
      go to 6220
 
   case (49)
-6199 write (unit = lunit(6), fmt = 7199)  flstat(15), lstat(14), flstat(13), lstat(13)
+     write (unit = lunit(6), fmt = 7199)  flstat(15), lstat(14), flstat(13), lstat(13)
 7199 format (5x, "the present   'Semlyen setup'   data case has broken down in the middle of a matrix inversion operation for",/, &
           5x, 'frequency',    e14.5,    '    Hertz.   The eigenvector (modal transformation) matrix of order',  i5,   '    has',/, &
           5x, 'the value',     e13.3,    '    for the largest possible pivot element of row number',   i5,   ' .    But this does'    )
@@ -624,7 +624,7 @@ subroutine over54
      go to 6220
 
   case (50)
-6200 write (unit = lunit(6), fmt = 7200)
+     write (unit = lunit(6), fmt = 7200)
 7200 format (5x, 'Memory-overflow problem, before entry into the renumbering overlay (for transient network renumbering).',/, &
           5x, 'recall that space for renumbering comes from a major portion of   /label/ .    Three vectors are used, with size',/, &
           5x, 'given by list number  99  of the case-summary statistics.   This space is insufficient even for the simple storage',/, &
@@ -648,7 +648,7 @@ subroutine over54err7421
   use blkcom
   implicit none
   !
-7421 write (unit = lunit(6), fmt = 7521)
+  write (unit = lunit(6), fmt = 7521)
 7521 format (/, 5x, 'Since the user is having trouble with 6-character tacs variable names, it is perhaps worth qualifying the',/, &
        5x, 'preceding error text which complains about an unidentifiable name that is associated with a certain tacs component',/, &
        5x, 'or data class.   All that is really involved here is a spelling comparison with other usages of the same variable',/, &

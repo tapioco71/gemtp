@@ -52,7 +52,7 @@ subroutine over53
   !  go to (6091 , 6092, 6093, 6094, 6095, 6096, 6097, 6098, 6099, 6100, 6101, 6102, 6103, 6104, 6105, 6106, 6107, 6108, 6109, 6110, 6111, 6112, 6113, 6114, 6115, 6116, 6117, 6118, 6119, 6120, 6121, 6122, 6123, 6124, 6125, 6126, 6127, 6128, 6129, 6130, 6131, 6132, 6133, 6134, 6135, 6136, 6137, 6138, 6139, 6140, 6141, 6142, 6143, 6144, 6145, 6146, 6147, 6148, 6149, 6150, 6220), n1
   select case (n1)
   case (1)
-6091 write (unit = lunit(6), fmt = 7091)
+     write (unit = lunit(6), fmt = 7091)
 7091 format (5x, "The data case now in its final stages of input is for a statistical overvoltage study, since field  'nenerg'",/, &
           5x, 'of columns 65-72 of the 2nd miscellaneous data card was punched with a positive number.   Yet the last-read data',/, &
           5x, "card requests the output of all network node voltages, by means of the  '1'  punched in column 2.   But the EMTP",/, &
@@ -62,7 +62,7 @@ subroutine over53
           5x,  'node voltage output option. ')
 
   case (2)
-6092 write (unit = lunit(6), fmt = 7092)
+     write (unit = lunit(6), fmt = 7092)
 7092 format (5x, "The EMTP logic has just attempted to read another data card by means of a call to subroutine  'cimage' .",/, &
           5x, 'But no more data is to be found on logical unit number 5.   An end-of-file mark has been encountered upon attempting',/, &
           5x, 'to read from this unit.   execution must be stopped, since data which is required for continuation of the study',/, &
@@ -70,7 +70,7 @@ subroutine over53
      go to 6220
 
   case (3)
-6093 write (unit = lunit(6), fmt = 7093)
+     write (unit = lunit(6), fmt = 7093)
 7093 format (5x, 'The last-read data card is for one phase (mode) of a distributed-parameter transmission line.   But one or more',/, &
           5x, 'of the parameter values read therefrom makes the data illegal.   The four fields of columns 27-50 are not all',/, &
           5x, 'blank, so this mode data is not taken by the EMTP to be a request for a copy of the parameters of the preceding mode.', /, &
@@ -87,7 +87,7 @@ subroutine over53
      go to 6220
 
   case (4)
-6094 write (unit = lunit(6), fmt = 7094) flstat(14), flstat(15)
+     write (unit = lunit(6), fmt = 7094) flstat(14), flstat(15)
 7094 format (5x, 'The last-read data card has been taken by the t.p. to be a switch card, with closing time to be determined',/, &
           5x, 'randomly as part of a statistical overvoltage study.   But the mean closing time of',  e13.4, '  seconds and the',/, &
           5x,  'standard deviation of',  e13.4, '  seconds are such that switch closing times less than zero would not be totally',/, &
@@ -119,7 +119,7 @@ subroutine over53
      go to 6220
 
   case (5)
-6095 write (unit = lunit(6), fmt = 7094) flstat(14), flstat(15)
+     write (unit = lunit(6), fmt = 7094) flstat(14), flstat(15)
      write (unit = lunit(6), fmt = 7095)
 7095 format (5x, 'The mean must not be less than the square root of three times the standard deviation.   This condition would',/, &
           5x, 'guarantee that switch closing times would always be positive, for the uniform distribution which the user has',/, &
@@ -131,7 +131,7 @@ subroutine over53
      go to 6220
 
   case (6)
-6096 write (unit = lunit(6), fmt = 7096)
+     write (unit = lunit(6), fmt = 7096)
 7096 format (5x, 'This run is being terminated due to an attempt to plot results.   The EMTP can be variably-dimensioned,',/, &
           5x, 'of course, with the present version simply having no available working space in which even the plot-file header',/, &
           5x, 'information can be stored.   If the user wants to do plotting, he must either do it interactively on the crt, or',/, &
@@ -165,7 +165,7 @@ subroutine over53
      go to 6220
 
   case (7)
-6097 write (unit = lunit(6), fmt = 7097) lstat(14), lstat(15)
+     write (unit = lunit(6), fmt = 7097) lstat(14), lstat(15)
 7097 format (5x,  'The last-read data card has an =e=-field number which is not right-adjusted in its data field.',/, &
           5x,  'In particular, either the letter =e=, or a sign following a numeral was found in the field',/, &
           5x,  'which starts in column number ', i4, ', while column number ', i4,  ', which is the right-most column of the field',/, &
@@ -182,7 +182,7 @@ subroutine over53
      go to 6220
 
   case (8)
-6098 write (unit = lunit(6), fmt = 7098) lstat(14), bus1, lstat(15)
+     write (unit = lunit(6), fmt = 7098) lstat(14), bus1, lstat(15)
 7098 format (5x,  'The last-read data card has an =i=-field number which is not right-adjusted in its data field.   In',/, &
           5x,  'particular, column number',  i4, '  contains the character  =',  a1,   '= ,  while column',  i3, ', which is the',/, &
           5x, 'right-most column of the field in question, is blank.   Now maybe such usage is legal fortran input for the user=s',/, &
@@ -194,7 +194,7 @@ subroutine over53
      go to 6220
 
   case (9)
-6099 write (unit = lunit(6), fmt = 7099)
+     write (unit = lunit(6), fmt = 7099)
 7099 format (5x, 'The EMTP has finished the calculation of weighting functions  a1(t)  and  a2(t)  for the user=s frequency-',/, &
           5x, 'dependent line-mode.   Now the program is ready to output these functions --- on punched cards, if the user has',/, &
           5x, 'given variable  =ipunch=  (of columns 33-40 of the second data card) a value of zero.   But this is not possible',/, &
@@ -212,7 +212,7 @@ subroutine over53
      go to 6220
 
   case (10)
-6100 write (unit = lunit(6), fmt = 7099)
+     write (unit = lunit(6), fmt = 7099)
      write (unit = lunit(6), fmt = 7100) flstat(15)
 7100 format (5x, 'Specifically, the weighting functions extend too far out in time, with duration in excess of the  100000',/, &
           5x, 'microseconds which can be punched legally using  f10.4  format.   With light traveling at a rate of  300 km',/, &
@@ -227,7 +227,7 @@ subroutine over53
      go to 6220
 
   case (11)
-6101 write (unit = lunit(6), fmt = 7101)
+     write (unit = lunit(6), fmt = 7101)
 7101 format (5x, 'The decision to kill this run has been made within the dummy (i.e., the original, the empty) subroutine',/, &
           5x, " 'analyt'  which is called by subroutine  'subts3'  of overlay 16 (overlay 18 when using ecs overlaying of the",/, &
           5x, 'time-step loop on cdc).   The user declared his intent to use analytically-defined sources at the beginning of',/, &
@@ -239,7 +239,7 @@ subroutine over53
      go to 6220
 
   case (12)
-6102 write (unit = lunit(6), fmt = 7102) lstat(15), bus1, bus2, flstat(14)
+     write (unit = lunit(6), fmt = 7102) lstat(15), bus1, bus2, flstat(14)
 7102 format (5x,    'linear branch number', i4,  '  (in order of data input) connects bus  ', "'", a6, "'", '  with bus  ', "'", a6,  "' .", /, &
           5x, 'data values on this card are for a mode of the distributed-parameter line which is being modeled with resistance',/, &
           5x, "lumped, one half in the middle, and one quarter at each each end (field  'ipunch'  of columns 53-54 equal to -1 ).",/, &
@@ -251,12 +251,12 @@ subroutine over53
      go to 6220
 
   case (13)
-6103 if (lstat(12) .gt. 0) write (unit = lunit(6), fmt = 7103) lstat(12)
+     if (lstat(12) .gt. 0) write (unit = lunit(6), fmt = 7103) lstat(12)
 7103 format (5x, 'Possible loss of significance in elimination step ', 1x, i4, 1x, 'in subroutine dgelg',/)
      go to 6220
 
   case (14)
-6104 write (unit = lunit(6), fmt = 7104) iprsov(37), lstat(12)
+     write (unit = lunit(6), fmt = 7104) iprsov(37), lstat(12)
 7104 format (5x, 'the data case now being solved involves one or more dynamic synchronous machine (s.m.) source components.', /, &
           5x, "The associated equations (Park's or Blondel's) are nonlinear, and must be solved by an iterative procedure at", /, &
           5x,  'each time step.   This iteration has failed to converge within the iteration limit of',  i5, ' ,   for dynamic', /, &
@@ -274,7 +274,7 @@ subroutine over53
      go to 6220
 
   case (15)
-6105 write (unit = lunit(6), fmt = 7105) lstat(14)
+     write (unit = lunit(6), fmt = 7105) lstat(14)
 7105 format (5x, 'The last-read data card is the first card of class-2 data for a dynamic synchronous machine (s.m.) source',/, &
           5x,  "component.   Variable  'numas'  as read from columns 1-2 of this card (using  i2  format) has value",  i5,  ' .' ,/, &
           5x, 'this is supposed to be the number of masses which make up the shaft system of the rotor of the machine.   But' ,/, &
@@ -282,7 +282,7 @@ subroutine over53
      go to 6220
 
   case (16)
-6106 d1 = 1.0d0 / fltinf
+     d1 = 1.0d0 / fltinf
      write (unit = lunit(6), fmt = 7106) bus1
 7106 format (5x,  'Erroneous data discovered during the initialization of multiple s.m. connected to bus', "'", a6, "'", '. The specified', /, &
           5x, "values of parameters 'smoutp' and/or 'smoutq' for the involved s.m.'s add up to zero.", /, &
@@ -294,12 +294,12 @@ subroutine over53
      go to 6220
 
   case (17)
-6107 write (unit = lunit(6), fmt = 7107)
+     write (unit = lunit(6), fmt = 7107)
 7107 format (5x, ' Fractional mass torque parameters do not conform to rules -- see user manual',/)
      go to 6220
 
   case (18)
-6108 write (unit = lunit(6), fmt = 7108)
+     write (unit = lunit(6), fmt = 7108)
 7108 format (5x, 'The last-read data card is taken by the EMTP to be a request for an auxiliary synchronous machine (s.m.) input',/, &
           5x, 'to tacs.   Recall that such data cards (if any) complete the data input for a dynamic s.m., after being followed',/, &
           5x, "by a terminator record which bears the text  'finish'  in columns 3-8.   But the last-read data card is illegal, ")
@@ -315,19 +315,19 @@ subroutine over53
              5x, 'All such names must be valid, for they serve as names of tacs variables (for type-92 tacs sources). ')
         go to 6220
      else
-7508    write (unit = lunit(6), fmt = 7608)  lstat( 14 ),  lstat( 13 )
+        write (unit = lunit(6), fmt = 7608)  lstat( 14 ),  lstat( 13 )
 7608    format (5x, 'Since the data read from columns 1-2 using  i2 format and from columns 15-17 using i3 format is invalid .,', /, &
              5x, 'the read values were....', i4, i5 )
      end if
      go to 6220
 
   case (19)
-6109 write (unit = lunit(6), fmt = 7109) kill
+     write (unit = lunit(6), fmt = 7109) kill
 7109 format (5x, 'Unused kill code number....', i5)
      go to 6220
 
   case (20)
-6110 write (unit = lunit(6), fmt = 7110) nenerg, bus5, bus6
+     write (unit = lunit(6), fmt = 7110) nenerg, bus5, bus6
 7110 format (5x,  "Parameter  'nenerg'  of the integer miscellaneous data card was punched nonzero (value", i5, '  )   for this',/, &
           5x, "data case, representing a request for a  'statistics'  or a  'systematic'  simulation.   The last-read data card",/, &
           5x, 'his for an EMTP switch, and it bears one of the two just-mentioned key words in columns 55-64, which is fine.',/, &
@@ -343,7 +343,7 @@ subroutine over53
      go to 6220
 
   case (21)
-6111 write (unit = lunit(6), fmt = 7111) lstat(13), lstat(15), lstat(16), lstat(17)
+     write (unit = lunit(6), fmt = 7111) lstat(13), lstat(15), lstat(16), lstat(17)
 7111 format (5x, 'One of the working vectors which are used to assemble output quantities for all dynamic synchronous machine',/, &
           5x, 'source components has overflowed.   The dimensioned limit for the number of  a6  identification names is',  i6,  ' ,  ',/, &
           5x, 'as is the maximum allowable number of output quantities. But after finishing with machine number',  i5,  ' ,',/, &
@@ -352,7 +352,7 @@ subroutine over53
      go to 6220
 
   case (22)
-6112 write (unit = lunit(6), fmt = 7112) kswtch
+     write (unit = lunit(6), fmt = 7112) kswtch
 7112 format (5x, 'Wow.   Double wow (wow, wow).   The EMTP has finished with the input of all switch cards for this data case.',/, &
           5x, 'of the', i5,  "  switches, over ten had the key word  'statistics'  or  'systematic'  punched in columns 55-64.",/, &
           5x, "in fact, there are over ten independent  'statistics'  or 'systematic'  switches  ----  distinguished by either",/, &
@@ -370,7 +370,7 @@ subroutine over53
      go to 6220
 
   case (23)
-6113 n2 = lstat(13)
+     n2 = lstat(13)
      write (unit = lunit(6), fmt = 7113) nenerg
 7113 format (5x, "The data case now being processed is for a  'systematic'  study, since integer miscellaneous data parameter",/, &
           5x, " 'nenerg'  was punched as a negative number.   Using  i8 format, a value of", i6,  "   was read for  'nenerg'",/, &
@@ -386,7 +386,7 @@ subroutine over53
           (1x, 12i10))
      do i = 1, numref
         if (ipntv(i) .le. 0) go to 7513
-7413 end do
+     end do
      go to 6220
 7513 write (unit = lunit(6), fmt = 7613) i, ipntv(i)
 7613 format (5x,  'Upon inspecting these figures, the EMTP immediately notices that number', i4,  '  is illegal.   A value of',/, &
@@ -398,7 +398,7 @@ subroutine over53
      go to 6220
 
   case (24)
-6114 write (unit = lunit(6), fmt = 7114)
+     write (unit = lunit(6), fmt = 7114)
 7114 format (' unused.')
      write (unit = lunit(6), fmt = 17115) lstat(14), bus1
 17115 format (5x, "The user has been inputting 'TACS' data, specifically cards which define TACS function blocks.   Yet the",/, &
@@ -413,7 +413,7 @@ subroutine over53
      go to 6220
 
   case (25)
-6115 write (unit = lunit(6), fmt = 7115) lstat(14), bus1
+     write (unit = lunit(6), fmt = 7115) lstat(14), bus1
 7115 format (5x, "The user has been inputting 'TACS' data, specifically cards which define TACS function blocks.   Yet the",/, &
           5x, "last-read data card has an illegal integer  'n'  punched in the field of columns 1-2.   A value of", i4,  '  was',/, &
           5x, "read, for this block having (output) variable name  ", "'",  a6,  "'", ' .   since this integer does not equal one of',/, &
@@ -426,7 +426,7 @@ subroutine over53
      go to 6220
 
   case (26)
-6116 write (unit = lunit(6), fmt = 7116) bus1, lstat(14)
+     write (unit = lunit(6), fmt = 7116) bus1, lstat(14)
 7116 format (5x, 'The EMTP data case under consideration includes a tacs representation, the function blocks of which are now',/, &
           5x, 'being inputted.   Now, the last tacs function block which was read by the EMTP had (output) name  ', "'", a6, "'",/, &
           5x,  '(punched in columns 3-8), and was purported to be a dynamic function block of order', i3, '  (punched in columns',/, &
@@ -447,7 +447,7 @@ subroutine over53
      go to 6220
 
   case (27)
-6117 n9 = 50
+     n9 = 50
      write (unit = lunit(6), fmt = 7117) n9, ipunch
 7117 format (5x, 'The last-read data card is the first branch card for a multi-phase line which is to be modeled using Semlyen',/, &
           5x, 'or Ametani recursive convolution for the frequency-dependent representation.   Such modeling is limited to a',/, &
@@ -459,7 +459,7 @@ subroutine over53
      go to 6220
 
   case (28)
-6118 write (unit = lunit(6), fmt = 7118)
+     write (unit = lunit(6), fmt = 7118)
 7118 format (5x, 'The blank card which terminates the input of tacs data cards which define function blocks has now just been',/, &
           5x, 'read.   But no function-block definitions preceded this blank card.   The user will not be allowed to continue',/, &
           5x, "with such a degenerate tacs representation.  If the user's present representation has any meaning at all, it must",/, &
@@ -471,12 +471,12 @@ subroutine over53
      go to 6220
 
   case (29)
-6119 write (unit = lunit(6), fmt = 7147) bus6
+     write (unit = lunit(6), fmt = 7147) bus6
      call over53err7421
      go to 6220
 
   case (30)
-6120 write (unit = lunit(6), fmt = 7120) bus1, lstat(14)
+     write (unit = lunit(6), fmt = 7120) bus1, lstat(14)
 7120 format (5x, "The EMTP is in the process of inputting the user's tacs supplemental-variable data cards, with the last-read",/, &
           5x, 'such data card being in error.   Specifically, the user has attempted to define a supplemental variable named',/, &
           5x, "'", a6, "'", '  (data field of columns 3-8 of the card), for which the type code which has been punched in columns 1-2',/, &
@@ -484,7 +484,7 @@ subroutine over53
      go to 6220
 
   case (31)
-6121 write (unit = lunit(6), fmt = 7121) bus2, bus1
+     write (unit = lunit(6), fmt = 7121) bus2, bus1
 7121 format (5x, 'The tacs data which has now all been inputted is incomplete.   Specifically, there is a difficulty associated',/, &
           5x, 'with the tacs function block which was given the (output) name  ', "'", a6, "'", '  (as read from columns 3-8 of the',/, &
           5x, 'leading card which defines this function block).   One of the five possible inputs to this block was given name',/, &
@@ -497,7 +497,7 @@ subroutine over53
      go to 6220
 
   case (32)
-6122 write (unit = lunit(6), fmt = 7122) lstat( 17), lstat(16)
+     write (unit = lunit(6), fmt = 7122) lstat( 17), lstat(16)
 7122 format (5x, 'The tacs representation currently being processed has overflowed the dimensioned tacs storage.   Specifically,',/, &
           5x, 'the tables which are numbered', i4,  '  (see explanatory directory of table numbers below) which have a length of',/, &
           5x, i4, '  entries are now full.   Because there is not enough room to solve the problem, execution is being stopped.',/,1x)
@@ -558,7 +558,7 @@ subroutine over53
      go to 6220
 
   case (33)
-6123 write (unit = lunit(6), fmt = 7123)
+     write (unit = lunit(6), fmt = 7123)
 7123 format (' unused.')
      write (unit = lunit(6), fmt = 17124)
 17124 format (5x, "Preceding all TACS data cards, the user inputted a special request card which was punched with the text  'tacs",/, &
@@ -574,7 +574,7 @@ subroutine over53
      go to 6220
 
   case (34)
-6124 write (unit = lunit(6), fmt = 7124)
+     write (unit = lunit(6), fmt = 7124)
 7124 format (5x, "Preceding all TACS data cards, the user inputted a special request card which was punched with the text  'tacs",/, &
           5x, "EMTP sources'  in columns 1-17.   Now, columns 21-80 of this card are to be read by the EMTP using  10a6  format,",/, &
           5x, 'in order to discover which type 1 through 10 EMTP sources the user wants to have controlled by specified tacs',/, &
@@ -588,7 +588,7 @@ subroutine over53
      go to 6220
 
   case (35)
-6125 n1 = 90
+     n1 = 90
      write (unit = lunit(6), fmt = 7125) n1, bus1
 7125 format (5x,  "As part of the user's tacs data which has now been completely read by the EMTP, there was a type-", i2,  ' tacs',/, &
           5x,  'source card which bore the 6-character alphanumeric name ', "'", a6, "'", '  in columns 3-8.   Now, by definition, this',/, &
@@ -602,7 +602,7 @@ subroutine over53
      go to 6220
 
   case (36)
-6126 n1 = 91
+     n1 = 91
      write (unit = lunit(6), fmt = 7125) n1, bus1
      write (unit = lunit(6), fmt = 7226)
 7226 format ('+',  17x,  'aalso, this EMTP electrical-network node must have a switch connected to it, since it is the',/, &
@@ -613,7 +613,7 @@ subroutine over53
      go to 6220
 
   case (37)
-6127 write (unit = lunit(6), fmt = 7127) lstat(14), bus1
+     write (unit = lunit(6), fmt = 7127) lstat(14), bus1
 7127 format (5x, 'Has part of the input of tacs data which is now complete, the user has elected to manually define initial',/, &
           5x, 'conditions for one or more tacs variables.   Recall that such data follows the blank card which terminates tacs',/, &
           5x, 'output-variable specification cards, with one tacs variable name and associated initial condition on each',/, &
@@ -626,7 +626,7 @@ subroutine over53
      go to 6220
 
   case (38)
-6128 write (unit = lunit(6), fmt = 7128)
+     write (unit = lunit(6), fmt = 7128)
 7128 format (5x, 'During triangularization of the real coefficient matrix  (a)  which is used by tacs either for dc initial',/, &
           5x, 'conditions or for the repeat solution of the time-step loop, an indication of singularity or near-singularity has ')
      write (unit = lunit(6), fmt = 7228) lstat(14), bus1, flstat(14)
@@ -644,7 +644,7 @@ subroutine over53
      go to 6220
 
   case (39)
-6129 d1 = sqrtz (flstat(14))
+     d1 = sqrtz (flstat(14))
      d2 = sqrtz (flstat(15))
      d3 = sqrtz (tolmat)
      write (unit = lunit(6), fmt = 7129)
@@ -659,7 +659,7 @@ subroutine over53
      go to 6220
 
   case (40)
-6130 write (unit = lunit(6), fmt = 7130) bus2
+     write (unit = lunit(6), fmt = 7130) bus2
 7130 format (5x, "the EMTP is in the process of inputting the user's tacs supplemental-variable data cards, with the last-read",/, &
           5x, 'such data card being in error.   Specifically, the user has attempted to define a supplemental variable having',/, &
           5x, '6-character name  ', "'", a6,  "'", '  (read from cols. 3-8 of the card) ')
@@ -672,7 +672,7 @@ subroutine over53
      go to 6220
 
   case (41)
-6131 n1 = lstat(14)
+     n1 = lstat(14)
      write (unit = lunit(6), fmt = 7131)
 7131 format (5x, 'The problem under consideration includes tacs data, the tacs function blocks of which have already all been',/, &
           5x, 'read by the EMTP.   Columns 69-80 of the leading data card for each function block are read using  2a6  format,',/, &
@@ -692,7 +692,7 @@ subroutine over53
      go to 6220
 
   case (42)
-6132 write (unit = lunit(6), fmt = 7130) bus2
+     write (unit = lunit(6), fmt = 7130) bus2
      write (unit = lunit(6), fmt = 7132) bus1
 7132 format ('+', 68x, 'for which one of the function codes is invalid.',/, &
           5x,  'one of the  a5  fields in which the functions are to be specified was read as  ', "'", a5,  "'", ' ,   which is an',/, &
@@ -700,26 +700,26 @@ subroutine over53
      go to 6220
 
   case (43)
-6133 write (unit = lunit(6), fmt = 7130) bus1
+     write (unit = lunit(6), fmt = 7130) bus1
      write (unit = lunit(6), fmt = 7133)
 7133 format ('+', 68x, 'for which no operator, function, or argument has',/, &
           5x, 'been defined.   The EMTP cannot calculate the output for a tacs block whose input is unknown. ')
      go to 6220
 
   case (44)
-6134 write (unit = lunit(6), fmt = 7130) bus1
+     write (unit = lunit(6), fmt = 7130) bus1
      write (unit = lunit(6), fmt = 7134) lstat(14)
 7134 format ('+', 68x, 'for which the device code is invalid.   A value',/, &
           5x, 'of',  i4, '  was read from columns 9-10 of the card, which is not a legal tacs supplemental device code number. ')
      go to 6220
 
   case (45)
-6135 write (unit = lunit(6), fmt = 7130) bus1
+     write (unit = lunit(6), fmt = 7130) bus1
      write (unit = lunit(6), fmt = 7236)
      go to 6220
 
   case (46)
-6136 write (unit = lunit(6), fmt = 7136) bus1
+     write (unit = lunit(6), fmt = 7136) bus1
 7136 format (5x, 'The user has been inputting tacs data, with the last-read data card being a request for a function block.',/, &
           5x,  'This was to be given (output) variable name  ', "'", a6, "'", ' ,   as read from columns 3-8 of the last-read data card. ')
      write (unit = lunit(6), fmt = 7236)
@@ -729,7 +729,7 @@ subroutine over53
      go to 6220
 
   case (47)
-6137 write (unit = lunit(6), fmt = 7137) bus1, lstat(14), bus2, bus3
+     write (unit = lunit(6), fmt = 7137) bus1, lstat(14), bus2, bus3
 7137 format ( 5x, 'The EMTP has been inputting tacs function blocks, with the last-read data card representing an illegal such',/, &
           5x,  'request.   This was to have been the lead card of a function block having (output) name  ', "'", a6,  "'", '  (cols. 3-8).',/, &
           5x,  'input field number', i3,  '  to this block has been punched with tacs name  ', "'", a6,  "'", ' ,   but is not immediately',/, &
@@ -741,7 +741,7 @@ subroutine over53
      go to 6220
 
   case (48)
-6138 write (unit = lunit(6), fmt = 7138) lstat(14)
+     write (unit = lunit(6), fmt = 7138) lstat(14)
 7138 format (5x, 'The last-read data card has been taken by the EMTP to be a card specifying which tacs variables are to be',/, &
           5x, 'placed in the EMTP output vector (and hence will be available for printing and/or plotting purposes).   Yet the  i2',/, &
           5x, 'field of columns 1-2 contains an illegal integer value  ', "'", i2,  "'", ' .   Only values of zero (for selective output)',/, &
@@ -749,7 +749,7 @@ subroutine over53
      go to 6220
 
   case (49)
-6139 write (unit = lunit(6), fmt = 7130) bus3
+     write (unit = lunit(6), fmt = 7130) bus3
      n1 = lstat(14)
      !  go to  (7139, 7239, 7339), n1
      select case (n1)
@@ -776,7 +776,7 @@ subroutine over53
      go to 6220
 
   case (50)
-6140 write (unit = lunit(6), fmt = 7140)
+     write (unit = lunit(6), fmt = 7140)
 7140 format (5x, 'Were it not for the sharp eye and always helpful good common sense of the EMTP, this simulation might have',/, &
           5x, 'continued.   But there are no requests for tacs variables to be placed in the output vector, nor is the EMTP',/, &
           5x, 'expecting any electrical network data to follow, as part of this data case.   Recall that one or more nonblank',/, &
@@ -789,7 +789,7 @@ subroutine over53
      go to 6220
 
   case (51)
-6141 write (unit = lunit(6), fmt = 7141) nenerg
+     write (unit = lunit(6), fmt = 7141) nenerg
 7141 format (5x, "The key word  'statistics'  or  'systematic'  can be punched in columns 55-64 of a switch card, as part of a",/, &
           5x, "data case which has integer miscellaneous data parameter 'nenerg'  punched nonzero.   But these must be",/, &
           5x,  'coordinated as follows .....',/, 12x,  "positive  'nenerg'  -------  use only  'statistics'  ",/, &
@@ -802,12 +802,12 @@ subroutine over53
      go to 6220
 
   case (52)
-6142 write (unit = lunit(6), fmt = 7142) kill
+     write (unit = lunit(6), fmt = 7142) kill
 7142 format (5x, 'Unused kill code number....', i5)
      go to 6220
 
   case (53)
-6143 write (unit = lunit(6), fmt = 7143) bus2
+     write (unit = lunit(6), fmt = 7143) bus2
 7143 format (5x, 'The tacs data which has now all been inputted is incomplete.   Specifically, there is a problem which is',/, &
           5x, 'associated with the tacs supplemental variable or device which was given the (output) name  ', "'", a6, "'", '  (as',/, &
           5x, 'read from columns 3-8 of the data card which defined this variable).   The difficulty here is associated with',/, &
@@ -823,7 +823,7 @@ subroutine over53
      go to 6220
 
   case (54)
-6144 n1 = 93
+     n1 = 93
      write (unit = lunit(6), fmt = 7125) n1, bus1
      write (unit = lunit(6), fmt = 7144)
 7144 format ('+', 17x, 'Also, this EMTP electrical-network node must have a switch connected to it, since it is the',/, &
@@ -835,7 +835,7 @@ subroutine over53
      go to 6220
 
   case (55)
-6145 write (unit = lunit(6), fmt = 7145)
+     write (unit = lunit(6), fmt = 7145)
 7145 format (5x, 'The EMTP data case now being inputted involves one or more continuously-transposed distributed-parameter',/, &
           5x, 'transmission lines, with frequency-dependent representation of resistance  r  and  inductance  l  in one or more',/, &
           5x, 'of the modes.   In fact, the last-read data card is the miscellaneous data parameter card which precedes the point-',/, &
@@ -859,7 +859,7 @@ subroutine over53
      go to 6220
 
   case (56)
-6146 write (unit = lunit(6), fmt = 7146) bus1, bus2
+     write (unit = lunit(6), fmt = 7146) bus1, bus2
 7146 format (5x, 'Switch cards are now being inputted, for the EMTP data case under consideration.   Specifically, the last-read',/, &
           5x, 'data card represents a request for a type-11 switch (i.e. , a diode or a valve) which connects node  ', "'", a6,  "'",/, &
           5x,  'with node  ', "'", a6, "'", ' . ')
@@ -873,13 +873,13 @@ subroutine over53
      go to 6220
 
   case (57)
-6147 write (unit = lunit(6), fmt = 7147) bus5
+     write (unit = lunit(6), fmt = 7147) bus5
 7147 format (1x, 100( '-' ),  //, 5x,  'This switch makes reference to the non-existing control tacs variable  ', "'", a6, "'", //, 1x, 100('-'))
      call over53err7421
      go to 6220
 
   case (58)
-6148 write (unit = lunit(6), fmt = 7148) bus1, bus2, flstat(15), flstat(16)
+     write (unit = lunit(6), fmt = 7148) bus1, bus2, flstat(15), flstat(16)
 7148 format (5x, 'The last-read data card is for a switched-inductance element (type-93 switch card) which connects node',/, &
           5x, " '", a6, "'", '  with node  ', "'", a6, "'", ' .   But the value for residual flux (punched in columns 15-24, and read',/, &
           5x, 'using  e10.6  format) is illegal, for it exceeds the saturation flux (punched in columns 45-54, and read using',/, &
@@ -889,7 +889,7 @@ subroutine over53
      go to 6220
 
   case (59)
-6149 write (unit = lunit(6), fmt = 7149) flstat(14)
+     write (unit = lunit(6), fmt = 7149) flstat(14)
 7149 format (5x, 'The last-read data card has been taken by the EMTP to be a source card of type 14 (sinusoidal generator).',/, &
           5x, 'But the frequency as read from columns 21-30 of this card is not positive, as required by EMTP rules.   A value',/, &
           5x, 'of',     e13.4,   '  was read.   Sinusoids of other than positive frequency must be rejected by the EMTP on',/, &
@@ -897,7 +897,7 @@ subroutine over53
      go to 6220
 
   case (60)
-6150 d1 = flstat(14) / deltat
+     d1 = flstat(14) / deltat
      write (unit = lunit(6), fmt = 7150) deltat, bus1, bus2
 7150 format (5x, "The user has picked a time-step size  'deltat'  (read from columns 1-8 of the floating-point miscellaneous      ",/, &
           5x, 'data card) which is too small for one of the distributed parameter transmission lines that is to be modeled using      ',/, &
@@ -921,7 +921,7 @@ subroutine over53err7421
   use blkcom
   implicit none
   !
-7421 write (unit = lunit(6), fmt = 7521)
+  write (unit = lunit(6), fmt = 7521)
 7521 format (/, 5x, 'Since the user is having trouble with 6-character tacs variable names, it is perhaps worth qualifying the',/, &
        5x, 'preceding error text which complains about an unidentifiable name that is associated with a certain tacs component',/, &
        5x, 'or data class.   All that is really involved here is a spelling comparison with other usages of the same variable',/, &
