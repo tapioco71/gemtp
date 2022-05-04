@@ -32,11 +32,17 @@
 # Get and store the OS name.
 OS:=$(shell uname)
 
+# Is a toolchain defined?
+ifndef TOOLCHAIN
+TOOLCHAIN=gnu
+endif
+
 # Is an assembler defined?
 ifndef COMPILER
 COMPILER=gcc
 endif
 
+ifeq (${TOOLCHAIN},gnu)
 ifeq (${COMPILER},gcc)
 ifeq (${OS},OpenBSD)
 CC=${shell which egcc}
@@ -52,6 +58,7 @@ LD=${shell which ld}
 OBJCOPY=${shell which objcopy}
 OBJDUMP=${shell which objdump}
 MAKEDEPEND=${shell which makedepend}
+endif
 
 # Project-wide modules directory.
 MODULES_PATH=${ROOT}/modules
@@ -104,7 +111,7 @@ F90_FLAGS=	-O0				\
 		-fcheck=all			\
 		-finit-local-zero		\
 		-fno-automatic			\
-		-J${COMPILER}			\
+		-J${TOOLCHAIN}			\
 		-DWITH_MAIN10			\
 		-DWITH_OVER1			\
 		-DWITH_OVER2			\
@@ -150,17 +157,21 @@ OBJCOPY_FLAGS=	-S		\
 LD_FLAGS=
 
 # Makedepend flags.
-MAKEDEPEND_FLAGS=	-- ${CC_FLAGS} -- ${SOURCES}
+MAKEDEPEND_FLAGS=-- ${CC_FLAGS} -- ${SOURCES}
 
+ifneq (${INCLUDES_PATH},)
 # Add the include file paths to AS_FLAGS, CC_FLAGS and CPP_FLAGS.
 AS_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDES_PATH}}}
 CC_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDES_PATH}}}
 CPP_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDES_PATH}}}
 FORTRAN_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDES_PATH}}}
 F90_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDES_PATH}}}
+endif
 
+ifneq (${LIBRARIES_PATH},)
 # Add the library path to LD_FLAGS.
 LD_FLAGS+=${patsubst %,-L%,${subst :, ,${LIBRARIES_PATH}}}
+endif
 
 # Location of libgcc.a, libc.a and libm.a
 LIBGCC=${shell ${CC} -print-file-name=libgcc.a}
@@ -170,19 +181,20 @@ LIBGFORTRAN=${shell ${FORTRAN} -print-file-name=libgfortran.a}
 
 LIBRARIES=	c	\
 		m
-
+ifneq (${LIBRARIES},)
 LD_FLAGS+=${patsubst %,-l%,${subst :, ,${LIBRARIES}}}
+endif
 
 ifeq (${DEBUG},1)
-AS_FLAGS	+=	-ggdb3 -gstabs+
-CC_FLAGS	+=	-ggdb3 -gstabs+
-CPP_FLAGS	+=	-ggdb3 -gstabs+
-FORTRAN_FLAGS	+=	-ggdb3 -gstabs+
-F90_FLAGS	+=	-ggdb3 -gstabs+
+AS_FLAGS+=-ggdb3 -gstabs+
+CC_FLAGS+=-ggdb3 -gstabs+
+CPP_FLAGS+=-ggdb3 -gstabs+
+FORTRAN_FLAGS+=-ggdb3 -gstabs+
+F90_FLAGS+=-ggdb3 -gstabs+
 endif
 
 # Rule for building the object file from each assembly source files.
-${COMPILER}/%.o: %.S
+${TOOLCHAIN}/%.o: %.S
 	@if [ 'x${VERBOSE}' = x ];			\
 	then						\
 		echo " [ AS ] ${<}";			\
@@ -192,7 +204,7 @@ ${COMPILER}/%.o: %.S
 	@${AS} ${AS_FLAGS} ${<} -o ${@}
 
 # Rule for building the object file from each c source files.
-${COMPILER}/%.o: %.c
+${TOOLCHAIN}/%.o: %.c
 	@if [ 'x${VERBOSE}' = x ];			\
 	then						\
 		echo " [ CC ] ${<}";			\
@@ -202,7 +214,7 @@ ${COMPILER}/%.o: %.c
 	@${CC} ${CC_FLAGS} ${<} -o ${@}
 
 # Rule for building the object file from each c source files.
-${COMPILER}/%.o: %.cpp
+${TOOLCHAIN}/%.o: %.cpp
 	@if [ 'x${VERBOSE}' = x ];				\
 	then							\
 		echo " [ CPP ] ${<}";				\
@@ -212,7 +224,7 @@ ${COMPILER}/%.o: %.cpp
 	@${CPP} ${CPP_FLAGS} ${<} -o ${@}
 
 # Rule for building the object file from each fortran source files.
-${COMPILER}/%.o: %.for
+${TOOLCHAIN}/%.o: %.for
 	@if [ 'x${VERBOSE}' = x ];					\
 	then								\
 		echo " [ F77 ] ${<}";					\
@@ -222,7 +234,7 @@ ${COMPILER}/%.o: %.for
 	@${FORTRAN} ${FORTRAN_FLAGS} ${<} -o ${@}
 
 # Rule for building the object file from each fortran 90 source files.
-${COMPILER}/%.o: %.f90
+${TOOLCHAIN}/%.o: %.f90
 	@if [ 'x${VERBOSE}' = x ]; then				\
 		echo " [ F90 ] ${<}";				\
 	else							\
@@ -231,7 +243,7 @@ ${COMPILER}/%.o: %.f90
 	@${FORTRAN} ${F90_FLAGS} ${<} -o ${@}
 
 # Rule for building the module files.
-${COMPILER}/%.o: ${MODULES_PATH}/%.f90
+${TOOLCHAIN}/%.o: ${MODULES_PATH}/%.f90
 	@if [ 'x${VERBOSE}' = x ];				\
 	then							\
 		echo " [ F90 MOD ] ${<}";			\
@@ -241,7 +253,7 @@ ${COMPILER}/%.o: ${MODULES_PATH}/%.f90
 	@${FORTRAN} ${F90_FLAGS} ${<} -o ${@}
 
 # Rule for linking the final program file.
-${COMPILER}/%:
+${TOOLCHAIN}/%:
 	@if [ 'x${VERBOSE}' = x ]; then					\
 		echo " [ LD ] ${@}";					\
 	else								\
@@ -256,13 +268,15 @@ ${COMPILER}/%:
 		-Wl,--end-group
 
 # Rule to create a .lst file.
-${COMPILER}/%.lst:
+${TOOLCHAIN}/%.lst:
 	@if [ 'x${VERBOSE}' = x ];				\
 	then							\
-		echo " [ objdump ] ${@}";			\
+		echo " [ LST ] ${@}";				\
 	else							\
 		echo "${OBJDUMP} ${OBJDUMP_FLAGS} ${<} > ${@}";	\
 	fi
 	@${OBJDUMP} ${OBJDUMP_FLAGS} ${<} > ${@}
 
+else
+$(error "Unknown toolchain")
 endif

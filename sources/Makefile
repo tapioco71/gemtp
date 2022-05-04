@@ -29,6 +29,9 @@
 
 # file: Makefile
 
+# Toolchain
+TOOLCHAIN=gnu
+
 # Compiler to be used.
 COMPILER=gcc
 
@@ -71,16 +74,16 @@ MODULES=
 include ${ROOT}/Makefile.global
 
 # The default rule.
-all: ${COMPILER}
-all: ${COMPILER}/${TARGET}
+all: ${TOOLCHAIN}
+all: ${TOOLCHAIN}/${TARGET}
 
 # Other rules.
 
-${TARGET}: ${COMPILER}
-${TARGET}: ${COMPILER}/${TARGET}
+${TARGET}: ${TOOLCHAIN}
+${TARGET}: ${TOOLCHAIN}/${TARGET}
 
-vardim: ${COMPILER}
-vardim: ${COMPILER}/${VARDIM}
+vardim: ${TOOLCHAIN}
+vardim: ${TOOLCHAIN}/${VARDIM}
 
 # dimensioning via vardim
 setup: vardim
@@ -90,7 +93,7 @@ setup: ${SOURCES_PATH}/newmods.f90
 
 # List rule
 lst: all
-lst: ${COMPILER}/${TARGET}.lst
+lst: ${TOOLCHAIN}/${TARGET}.lst
 
 .PHONY: clean
 # The clean rule.
@@ -98,9 +101,9 @@ clean:	clear_modules
 clean:
 	@if [ 'x${VERBOSE}' = x ];					\
 	then								\
-		echo " [ clean ] ${COMPILER}";				\
+		echo " [ CLEAN ] ${TOOLCHAIN}";				\
 	else								\
-		echo "rm -rf ${COMPILER}				\
+		echo "rm -rf ${TOOLCHAIN}				\
 				*.tab.c					\
 				${ROOT}/includes/*.tab.h		\
 				${ROOT}/includes/*~			\
@@ -112,7 +115,7 @@ clean:
 				${ROOT}/${SOURCES_PATH}/newmods.f90	\
 				${wildcard *~} ${<}";			\
 	fi
-	@rm -rf ${COMPILER} 				\
+	@rm -rf ${TOOLCHAIN} 				\
 		*.tab.c					\
 		${ROOT}/includes/*.tab.h		\
 		${ROOT}/includes/*~			\
@@ -125,35 +128,35 @@ clean:
 		${wildcard *~} ${<}
 
 clear_modules:
-	@rm -rf ${COMPILER}/*.mod
+	@rm -rf ${TOOLCHAIN}/*.mod
 
 # The rule which creates the .o and executable directory.
-${COMPILER}:
+${TOOLCHAIN}:
 	@if [ 'x${VERBOSE}' = x ];		\
 	then					\
-		echo " [ mkdir ] ${COMPILER}";	\
+		echo " [ MKDIR ] ${TOOLCHAIN}";	\
 	else					\
-		echo "mkdir -p ${COMPILER}";	\
+		echo "mkdir -p ${TOOLCHAIN}";	\
 	fi
-	@mkdir -p ${COMPILER}
+	@mkdir -p ${TOOLCHAIN}
 
 dimension:
-	@if [ -f ${COMPILER}/${VARDIM} ];					\
-	then									\
-		if [ -f ${LISTSIZE} ];						\
-		then								\
-			if [ 'x${VERBOSE}' = x ];				\
-			then							\
-				echo " [ VARDIM ] ${LISTSIZE}";			\
-			else							\
-				echo "cat ${LISTSIZE} | ${COMPILER}/${VARDIM}";	\
-			fi;							\
-			cat ${LISTSIZE} | ${COMPILER}/${VARDIM};		\
-		else								\
-			echo "No ${LISTSIZE} file";				\
-		fi;								\
-	else									\
-		echo "No ${COMPILER}/${VARDIM}";				\
+	@if [ -f ${TOOLCHAIN}/${VARDIM} ];						\
+	then										\
+		if [ -f ${LISTSIZE} ];							\
+		then									\
+			if [ 'x${VERBOSE}' = x ];					\
+			then								\
+				echo " [ VARDIM ] ${LISTSIZE}";				\
+			else								\
+				echo "cat ${LISTSIZE} | ${TOOLCHAIN}/${VARDIM}";	\
+			fi;								\
+			cat ${LISTSIZE} | ${TOOLCHAIN}/${VARDIM};			\
+		else									\
+			echo "No ${LISTSIZE} file";					\
+		fi;									\
+	else										\
+		echo "No ${TOOLCHAIN}/${VARDIM}";					\
 	fi
 
 ${SOURCES_PATH}/newmods.f90:
@@ -184,134 +187,132 @@ ${MODULES_PATH}/labcom.f90:
 		echo "Cannot create labcom.f90.";			\
 	fi
 
-# Rule for compiling the main program.
-# ${COMPILER}/${TARGET}: ${COMPILER}/blockdspy.o
-
 # The rule to creates modules.
-modules: ${COMPILER}
-modules: ${COMPILER}/${TARGET}
+modules: ${TOOLCHAIN}
+modules: ${TOOLCHAIN}/${TARGET}
 
 # Modules.
-${COMPILER}/${TARGET}: ${COMPILER}/linemodel.o
-${COMPILER}/${TARGET}: ${COMPILER}/systematic.o
-${COMPILER}/${TARGET}: ${COMPILER}/blkcom.o
-${COMPILER}/${TARGET}: ${COMPILER}/labcom.o
-${COMPILER}/${TARGET}: ${COMPILER}/tracom.o
-${COMPILER}/${TARGET}: ${COMPILER}/pckcom.o
-${COMPILER}/${TARGET}: ${COMPILER}/strcom.o
-${COMPILER}/${TARGET}: ${COMPILER}/freedom.o
-${COMPILER}/${TARGET}: ${COMPILER}/bcddat.o
-${COMPILER}/${TARGET}: ${COMPILER}/bcdtim.o
-${COMPILER}/${TARGET}: ${COMPILER}/movcop.o
-${COMPILER}/${TARGET}: ${COMPILER}/random.o
-${COMPILER}/${TARGET}: ${COMPILER}/volt45.o
-${COMPILER}/${TARGET}: ${COMPILER}/deck10.o
-${COMPILER}/${TARGET}: ${COMPILER}/deck29.o
-${COMPILER}/${TARGET}: ${COMPILER}/deck31.o
-${COMPILER}/${TARGET}: ${COMPILER}/deck39.o
-${COMPILER}/${TARGET}: ${COMPILER}/deck44.o
-${COMPILER}/${TARGET}: ${COMPILER}/deck47.o
-${COMPILER}/${TARGET}: ${COMPILER}/dekspy.o
-${COMPILER}/${TARGET}: ${COMPILER}/dekplt.o
-${COMPILER}/${TARGET}: ${COMPILER}/fixcom.o
-${COMPILER}/${TARGET}: ${COMPILER}/indcom.o
-${COMPILER}/${TARGET}: ${COMPILER}/iocons.o
-${COMPILER}/${TARGET}: ${COMPILER}/labl02.o
-${COMPILER}/${TARGET}: ${COMPILER}/labl29.o
-${COMPILER}/${TARGET}: ${COMPILER}/labl39.o
-${COMPILER}/${TARGET}: ${COMPILER}/labl44.o
-${COMPILER}/${TARGET}: ${COMPILER}/ovr44c.o
-${COMPILER}/${TARGET}: ${COMPILER}/labl47.o
-${COMPILER}/${TARGET}: ${COMPILER}/syncom.o
-${COMPILER}/${TARGET}: ${COMPILER}/synmac.o
-${COMPILER}/${TARGET}: ${COMPILER}/tacsar.o
-${COMPILER}/${TARGET}: ${COMPILER}/tacsto.o
-${COMPILER}/${TARGET}: ${COMPILER}/umdeck.o
-${COMPILER}/${TARGET}: ${COMPILER}/space1.o
-${COMPILER}/${TARGET}: ${COMPILER}/space2.o
-${COMPILER}/${TARGET}: ${COMPILER}/veccom.o
-${COMPILER}/${TARGET}: ${COMPILER}/umlocl.o
-${COMPILER}/${TARGET}: ${COMPILER}/fdqlcl.o
-${COMPILER}/${TARGET}: ${COMPILER}/kwtvax.o
-${COMPILER}/${TARGET}: ${COMPILER}/comlock.o
-${COMPILER}/${TARGET}: ${COMPILER}/a8sw.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/linemodel.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/systematic.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/blkcom.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/labcom.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/tracom.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/pckcom.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/strcom.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/freedom.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/bcddat.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/bcdtim.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/movcop.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/random.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/volt45.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/deck10.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/deck29.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/deck31.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/deck39.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/deck44.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/deck47.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/dekspy.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/dekplt.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/fixcom.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/indcom.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/iocons.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/labl02.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/labl29.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/labl39.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/labl44.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/ovr44c.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/labl47.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/syncom.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/synmac.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/tacsar.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/tacsto.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/umdeck.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/space1.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/space2.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/veccom.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/umlocl.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/fdqlcl.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/kwtvax.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/comlock.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/a8sw.o
 
-# EMTP Code.
-${COMPILER}/${TARGET}: ${COMPILER}/build1.o
-${COMPILER}/${TARGET}: ${COMPILER}/build2.o
-${COMPILER}/${TARGET}: ${COMPILER}/calc.o
-${COMPILER}/${TARGET}: ${COMPILER}/calsto.o
-${COMPILER}/${TARGET}: ${COMPILER}/comb.o
-# ${COMPILER}/${TARGET}: ${COMPILER}/data.o
-${COMPILER}/${TARGET}: ${COMPILER}/elec.o
-${COMPILER}/${TARGET}: ${COMPILER}/errstp.o
-${COMPILER}/${TARGET}: ${COMPILER}/pmodl.o
-${COMPILER}/${TARGET}: ${COMPILER}/pstmt.o
-${COMPILER}/${TARGET}: ${COMPILER}/ptacs.o
-${COMPILER}/${TARGET}: ${COMPILER}/puse.o
-${COMPILER}/${TARGET}: ${COMPILER}/putil1.o
-${COMPILER}/${TARGET}: ${COMPILER}/putil2.o
-${COMPILER}/${TARGET}: ${COMPILER}/step.o
-${COMPILER}/${TARGET}: ${COMPILER}/synstp.o
-${COMPILER}/${TARGET}: ${COMPILER}/ntacs1.o
-${COMPILER}/${TARGET}: ${COMPILER}/ntacs1a.o
-${COMPILER}/${TARGET}: ${COMPILER}/ntacs1b.o
-${COMPILER}/${TARGET}: ${COMPILER}/ntacs2.o
-${COMPILER}/${TARGET}: ${COMPILER}/ntacs3.o
-${COMPILER}/${TARGET}: ${COMPILER}/tread.o
-${COMPILER}/${TARGET}: ${COMPILER}/use1.o
-${COMPILER}/${TARGET}: ${COMPILER}/use2.o
-${COMPILER}/${TARGET}: ${COMPILER}/xpr1.o
-${COMPILER}/${TARGET}: ${COMPILER}/xpr2.o
-${COMPILER}/${TARGET}: ${COMPILER}/xref1.o
-${COMPILER}/${TARGET}: ${COMPILER}/xref2.o
-${COMPILER}/${TARGET}: ${COMPILER}/main00.o
-${COMPILER}/${TARGET}: ${COMPILER}/main10.o
-${COMPILER}/${TARGET}: ${COMPILER}/newmods.o
-${COMPILER}/${TARGET}: ${COMPILER}/init.o
-${COMPILER}/${TARGET}: ${COMPILER}/datain.o
-${COMPILER}/${TARGET}: ${COMPILER}/calcom.o
-${COMPILER}/${TARGET}: ${COMPILER}/inlmfs.o
-${COMPILER}/${TARGET}: ${COMPILER}/over1.o
-${COMPILER}/${TARGET}: ${COMPILER}/over2.o
-${COMPILER}/${TARGET}: ${COMPILER}/over5.o
-${COMPILER}/${TARGET}: ${COMPILER}/over6.o
-${COMPILER}/${TARGET}: ${COMPILER}/over7.o
-${COMPILER}/${TARGET}: ${COMPILER}/over8.o
-${COMPILER}/${TARGET}: ${COMPILER}/over9.o
-${COMPILER}/${TARGET}: ${COMPILER}/over10.o
-${COMPILER}/${TARGET}: ${COMPILER}/over11.o
-${COMPILER}/${TARGET}: ${COMPILER}/over12.o
-${COMPILER}/${TARGET}: ${COMPILER}/over13.o
-${COMPILER}/${TARGET}: ${COMPILER}/over14.o
-${COMPILER}/${TARGET}: ${COMPILER}/over15.o
-${COMPILER}/${TARGET}: ${COMPILER}/over16.o
-${COMPILER}/${TARGET}: ${COMPILER}/over20.o
-${COMPILER}/${TARGET}: ${COMPILER}/over29.o
-${COMPILER}/${TARGET}: ${COMPILER}/over31.o
-${COMPILER}/${TARGET}: ${COMPILER}/over39.o
-${COMPILER}/${TARGET}: ${COMPILER}/over41.o
-${COMPILER}/${TARGET}: ${COMPILER}/over42.o
-${COMPILER}/${TARGET}: ${COMPILER}/over44.o
-# ${COMPILER}/${TARGET}: ${COMPILER}/over45.o
-${COMPILER}/${TARGET}: ${COMPILER}/over47.o
-${COMPILER}/${TARGET}: ${COMPILER}/over51.o
-${COMPILER}/${TARGET}: ${COMPILER}/over52.o
-${COMPILER}/${TARGET}: ${COMPILER}/over53.o
-${COMPILER}/${TARGET}: ${COMPILER}/over54.o
-${COMPILER}/${TARGET}: ${COMPILER}/over55.o
-# ${COMPILER}/${TARGET}: ${COMPILER}/inlmfs.o
+# Rule for compiling the main program.
+# ${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/blockdspy.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/build1.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/build2.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/calc.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/calsto.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/comb.o
+# ${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/data.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/elec.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/errstp.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/pmodl.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/pstmt.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/ptacs.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/puse.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/putil1.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/putil2.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/step.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/synstp.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/ntacs1.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/ntacs1a.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/ntacs1b.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/ntacs2.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/ntacs3.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/tread.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/use1.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/use2.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/xpr1.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/xpr2.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/xref1.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/xref2.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/main00.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/main10.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/newmods.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/init.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/datain.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/calcom.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/inlmfs.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over1.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over2.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over5.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over6.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over7.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over8.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over9.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over10.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over11.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over12.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over13.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over14.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over15.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over16.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over20.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over29.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over31.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over39.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over41.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over42.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over44.o
+# ${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over45.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over47.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over51.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over52.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over53.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over54.o
+${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/over55.o
+# ${TOOLCHAIN}/${TARGET}: ${TOOLCHAIN}/inlmfs.o
 
 # Rule for compiling vardim program.
-${COMPILER}/${VARDIM}: ${COMPILER}/bcddat.o
-${COMPILER}/${VARDIM}: ${COMPILER}/bcdtim.o
-${COMPILER}/${VARDIM}: ${COMPILER}/${VARDIM}.o
+${TOOLCHAIN}/${VARDIM}: ${TOOLCHAIN}/bcddat.o
+${TOOLCHAIN}/${VARDIM}: ${TOOLCHAIN}/bcdtim.o
+${TOOLCHAIN}/${VARDIM}: ${TOOLCHAIN}/${VARDIM}.o
 
 # Rule to create a list file.
-${COMPILER}/${TARGET}.lst: ${COMPILER}/${TARGET}
+${TOOLCHAIN}/${TARGET}.lst: ${TOOLCHAIN}/${TARGET}
 
 # Include the automatically generated dependency files.
 ifneq (${MAKECMDGOALS},clean)
--include ${wildcard ${COMPILER}/*.d} __dummy__
+-include ${wildcard ${TOOLCHAIN}/*.d} __dummy__
 endif
 # DO NOT DELETE
