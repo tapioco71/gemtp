@@ -492,10 +492,7 @@ subroutine err87 (lstat, flstat, lunit6)
   !  dimension lstat(1), flstat(1)
   !
   write (unit = lunit6, fmt = 7087)
-7087 format (5x, "Has part of the interactive crt plotting or  'replot'  features of the EMTP,  plot data points are stored on   ",/, &
-       5x, "disk as a  'permanent file'  (as opposed to temporary, scratch storage, which is used for every emtp run).   It   ",/, &
-       5x, 'is the operation of internally cataloging this data file as a permanent file, inside the EMTP, which has gotten   ',/, &
-       5x, "the EMTP into trouble with the computer operating system (otherwise affectionately known as 'bigger big brother').     ")
+7087 format (5x, "Has part of the interactive crt plotting or  'replot'  features of the EMTP,  plot data points are stored on   ", /, 5x, "disk as a  'permanent file'  (as opposed to temporary, scratch storage, which is used for every emtp run).   It   ", /, 5x, 'is the operation of internally cataloging this data file as a permanent file, inside the EMTP, which has gotten   ', /, 5x, "the EMTP into trouble with the computer operating system (otherwise affectionately known as 'bigger big brother').")
   return
 end subroutine err87
 
