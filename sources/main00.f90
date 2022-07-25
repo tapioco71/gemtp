@@ -587,7 +587,7 @@ subroutine cimage
      if (lunsav(5) .ne. -5) numdcd = numdcd + 1
      read (unit = abuff, fmt = 3012, iostat = ios) text1, text2
 3012 format (2a1)
-     if (text1 .ne. charc) go to 3034
+     if (toLower(text1) .ne. charc) go to 3034
      if (text2 .ne. blank) go to 3034
 1036 if (noutpr .ne. 0) go to 1000
      if (n11 .ne. 0) go to 1000
