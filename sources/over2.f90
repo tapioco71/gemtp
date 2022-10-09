@@ -307,8 +307,9 @@ subroutine over2
 2055 format ('+Receiving end node names (9a6 format)')
   go to 100                                       ! end of three "/" cards for lmfs data case
 2100 if (kolbeg .gt. 0) go to 6618
-  read (unit = abuff, fmt = 1) itype, bus1, bus2, bus3, bus4
+  read (unit = abuff, fmt = 1, iostat = ios) itype, bus1, bus2, bus3, bus4
 1 format (i2, 4a6, 9e6.2)
+  if (ios .ne. 0) call stoptp
   go to 6621
 6618 nfrfld = 1
   call ffree (voltbc)
@@ -557,8 +558,8 @@ subroutine over2
 25968 format (' At 25968, ibr1, iaddrs and litype(ibr1) are', 3i10)
 5971 iaddrs = iadd + 1
 36621 itranm = 0
-  if (bus1 .ne. blank) go to 110
-  if (bus2 .ne. blank) go to 110
+  if (toLower (bus1) .ne. blank) go to 110
+  if (toLower (bus2) .ne. blank) go to 110
   if (itype .eq. 0) goto 4199
   if (itype .lt. 0 ) go to 110
   if (icas .eq. 0) nphcas = itype - 51
@@ -680,7 +681,7 @@ subroutine over2
   go to 9000
 3400 ntot = ntot + 1
   bus(ntot) = bus5
-  if (bus5 .ne. blank) go to 3401
+  if (toLower (bus5) .ne. blank) go to 3401
   kill = 161
   lstat(19) = 3401
   go to 9200

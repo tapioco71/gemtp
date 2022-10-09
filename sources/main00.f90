@@ -608,7 +608,7 @@ subroutine cimage
 3011 n13 = n13 - 1
   read (unit = abuff, fmt = 3037) text2
 3037 format (a6)
-  if (text2 .ne. text5) go to 3040
+  if (toLower (text2) .ne. text5) go to 3040
   if (n8 .eq. 6) go to 3044
   !  do i = 1, 10
   !     abuff(i) = blank

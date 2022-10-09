@@ -3437,11 +3437,11 @@ subroutine smdat (mtype)
   !
   integer(4), pointer :: ipout => ismdat(22)
   integer(4), pointer :: ismold => ismdat(24)
-  integer(4), pointer :: massex(:)
   integer(4), pointer :: n56 => ismdat(23)
   integer(4), pointer :: nn10 => ismdat(25)
   integer(4), pointer :: nn14 => ismdat(27)
   integer(4), pointer :: nn4 => ismdat(26)
+  real(8), pointer :: massex(:)
   !
   data  text1  / 'finish' /
   data  text2  / 'tolera' /
@@ -3458,7 +3458,8 @@ subroutine smdat (mtype)
   data  text21 / 'dc    ' /
   data  text16 / ' part ' /
   !
-  massex = transfer (histq, massex)
+  !massex = transfer (histq, massex)
+  massex => histq(:)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module smdat."')
   ! define no. of outputs in class 1 (nn10) and no. of classes (nn4)**

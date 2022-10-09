@@ -3137,7 +3137,7 @@ subroutine spyink
 3938 if (buff77(1 : 4) .eq. 'out ') go to 3851
   if (buff77(1 : 6) .eq. 'space ') go to 3851
   n66 = 0
-  if (buff77(1 : 6) .eq. 'blank ') n66 = 1
+  if (toLower (buff77(1 : 6)) .eq. 'blank ') n66 = 1
   write (unit = prom80, fmt = 3941)
 3941 format ('      Number of cards to be handled :')
   !  assign 3942 to nextsn

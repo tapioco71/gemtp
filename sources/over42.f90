@@ -1055,6 +1055,7 @@ end subroutine arrdat
 !
 
 subroutine zinold
+  use strcom
   use blkcom
   implicit none
   !     this module is used to convert old  ("m36." or earlier vintage )
@@ -1098,7 +1099,7 @@ subroutine zinold
   iarest = iarest + 1
   bbuff(iarest) = cbuff
   go to 100
-150 if (cbuff(1 : 6) .eq. 'blank ' .or. cbuff(1 : 30) .eq. cblank) then
+150 if (toLower (cbuff(1 : 6)) .eq. 'blank ' .or. cbuff(1 : 30) .eq. cblank) then
      if (iarest .gt. 0) go to 200
   else
      go to  100
@@ -1110,7 +1111,7 @@ subroutine zinold
 200 call cimage
   read (unit = abuff, fmt = 3417) text
   write (unit = cbuff, fmt = 3417) text
-  if (cbuff(1 : 6) .eq. 'blank ' .or. cbuff(1 : 30) .eq. cblank) go to 300
+  if (toLower (cbuff(1 : 6)) .eq. 'blank ' .or. cbuff(1 : 30) .eq. cblank) go to 300
   go to 200
   !     process source cards ********************************************
   !     read cards using cimage
@@ -1124,7 +1125,7 @@ subroutine zinold
      write (unit = cbuff, fmt = 3417) text
      if (cbuff(3 : 8) .eq. 'finish') go to 300
      go to 340
-  else if (cbuff(1 : 6) .eq. 'blank ' .or. cbuff(1 : 30) .eq. cblank) then
+  else if (toLower (cbuff(1 : 6)) .eq. 'blank ' .or. cbuff(1 : 30) .eq. cblank) then
      go to 400
   else if (cbuff(1 : 2) .eq. '19') then
      iblank = 0
@@ -1132,7 +1133,7 @@ subroutine zinold
 350  call cimage
      read (unit = abuff, fmt = 3417) text
      write (unit = cbuff, fmt = 3417) text
-     if (cbuff(1 : 6) .ne. 'blank ' .and. cbuff(1 : 30) .ne. cblank) go to 350
+     if (toLower (cbuff(1 : 6)) .ne. 'blank ' .and. cbuff(1 : 30) .ne. cblank) go to 350
      iblank = iblank + 1
      if (iblank .eq. 1) go to 350
   end if

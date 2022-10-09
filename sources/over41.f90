@@ -636,7 +636,7 @@ subroutine over41
 7288 format (///, ' Another saturable transformer has now been successfully converted to  (r), (l)  format.   that computation', /, ' is now complete.  The EMTP now begins to process the following case (if any) by re-listing the last-read data', /, ' card (which did not belong to the last case, recall).', /, 1x, 131('-'), /, '+', 50x, '1', /, 51x, '1', 13a6, a2)
   read (unit = abuff, fmt = 7281) bus5
 7281 format (2x, a6)
-  if (bus5 .eq. text12) go to 7123
+  if (toLower (bus5) .eq. text12) go to 7123
   if (bus5 .eq. blank) go to 3870
   lstat(14) = 1
   lstat(19) = 7288
@@ -654,6 +654,7 @@ end subroutine over41
 
 subroutine crdchg
   use blkcom
+  use strcom
   use dekspy
   implicit none
   !
@@ -749,7 +750,7 @@ subroutine crdchg
      end if
      !
      if (card .eq. blanks) go to 500
-     if (card(1 : 5) .eq. 'blank') go to 500
+     if (toLower (card(1 : 5)) .eq. 'blank') go to 500
      !
   end do
 200 continue
@@ -761,7 +762,7 @@ subroutine crdchg
      write (unit = card, fmt = 600) text
 600  format (13a6, a2)
      if (card .eq. blanks) go to 10000
-     if (card(1 : 5) .eq. 'blank') go to 10000
+     if (toLower (card(1 : 5)) .eq. 'blank') go to 10000
      !
      !     *** case '92' ***
      !

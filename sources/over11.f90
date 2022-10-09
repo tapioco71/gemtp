@@ -268,9 +268,9 @@ subroutine over11
   data text6 / 'pctang' /
   data nfsout / 0 /
   !
-  jch2 => imfd
-  vim => volt
-  locatn(i, j) = (j * j - j) / 2 + i
+  jch2 => imfd(:)
+  vim => volt(:)
+  ! locatn(i, j) = (j * j - j) / 2 + i
   ll2 = 2
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module over11.')
