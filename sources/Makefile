@@ -99,32 +99,32 @@ lst: ${TOOLCHAIN}/${TARGET}.lst
 # The clean rule.
 clean:	clear_modules
 clean:
-	@if [ 'x${VERBOSE}' = x ];					\
-	then								\
-		echo " [ CLEAN ] ${TOOLCHAIN}";				\
-	else								\
-		echo "rm -rf ${TOOLCHAIN}				\
-				*.tab.c					\
-				${ROOT}/includes/*.tab.h		\
-				${ROOT}/includes/*~			\
-				*.o					\
-				*.output				\
-				.depend					\
-				fort.*					\
-				${ROOT}/${MODULES_PATH}/labcom.f90	\
-				${ROOT}/${SOURCES_PATH}/newmods.f90	\
-				${wildcard *~} ${<}";			\
+	@if [ 'x${VERBOSE}' = x ];				\
+	then							\
+		echo " [ CLEAN ] ${TOOLCHAIN}";			\
+	else							\
+		echo "rm -rf ${TOOLCHAIN}			\
+				*.tab.c				\
+				${ROOT}/includes/*.tab.h	\
+				${ROOT}/includes/*~		\
+				*.o				\
+				*.output			\
+				.depend				\
+				fort.*				\
+				${MODULES_PATH}/labcom.f90	\
+				${SOURCES_PATH}/newmods.f90	\
+				${wildcard *~} ${<}";		\
 	fi
-	@rm -rf ${TOOLCHAIN} 				\
-		*.tab.c					\
-		${ROOT}/includes/*.tab.h		\
-		${ROOT}/includes/*~			\
-		*.o					\
-		*.output				\
-		.depend					\
-		fort.*					\
-		${ROOT}/${MODULES_PATH}/labcom.f90	\
-		${ROOT}/${SOURCES_PATH}/newmods.f90	\
+	@rm -rf ${TOOLCHAIN} 					\
+		*.tab.c						\
+		${ROOT}/includes/*.tab.h			\
+		${ROOT}/includes/*~				\
+		*.o						\
+		*.output					\
+		.depend						\
+		fort.*						\
+		${MODULES_PATH}/labcom.f90			\
+		${SOURCES_PATH}/newmods.f90			\
 		${wildcard *~} ${<}
 
 clear_modules:
