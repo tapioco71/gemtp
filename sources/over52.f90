@@ -49,7 +49,8 @@ subroutine over52
   !  go to (6051 , 6052, 6053, 6054, 6055, 6056, 6057, 6058, 6059, 6060, 6061 , 6062, 6063, 6064, 6065, 6066, 6067, 6068, 6069, 6070, 6071 , 6072, 6073, 6074, 6075, 6076, 6077, 6078, 6079, 6080, 6081 , 6082, 6083, 6084, 6085, 6086, 6087, 6088, 6089, 6090  ), n1
   select case (n1)
   case (1)
-6051 write (unit = lunit(6), fmt = 7051) lstat(14), bus1, bus2
+     ! 6051
+     write (unit = lunit(6), fmt = 7051) lstat(14), bus1, bus2
 7051 format (5x, "The user's network includes a group of mutually-coupled branches of order ", i2, ' which are specified by', /, &
           5x, 'matrices (a), (b).   The first branch of this problem group connects bus ', "'", a6, "'", ' with bus ', "'", a6, "'.   When",/, &
           5x, 'using the (a), (b) option, the number of upper-triangle matrix elements ( n(n+1)/2 ) must not exceed the bus', /, &
@@ -58,7 +59,8 @@ subroutine over52
      go to 6220
 
   case (2)
-6052 write (unit = lunit(6), fmt = 7052) lstat(16)
+     ! 6052
+     write (unit = lunit(6), fmt = 7052) lstat(16)
 7052 format (5x, 'The user has been inputting a saturable-transformer component, the data for which is not all legal.   Of the', /, &
           5x,  'rules to follow, that numbered ', i1,  ' has been violated.   Rules include....', /, &
           10x,  '1)  zero-sequence reluctance of air-return path of 3-phase unit must be positive.', /, &
@@ -71,7 +73,8 @@ subroutine over52
      go to 6220
 
   case (3)
-6053 write (unit = lunit(6), fmt = 7453)
+     ! 6053
+     write (unit = lunit(6), fmt = 7453)
 7453 format (5x, 'The user is attempting to use the steady-state cascading of pi-circuits option to solve a very large problem.')
      write (unit = lunit(6), fmt = 7053) lstat(12)
 7053 format (5x, 'Error in cascaded-pi data.', /, &
@@ -90,7 +93,8 @@ subroutine over52
      go to 6220
 
   case (4)
-6054 write (unit = lunit(6), fmt = 7154)
+     ! 6054
+     write (unit = lunit(6), fmt = 7154)
 7154 format (5x, 'The user has attempted to use the steady-state cascading of pi-circuits option, but has made an input data error.')
      write (unit = lunit(6), fmt = 7054) lstat(13), lstat(12)
 7054 format (5x, 'The line-position card provides for specification of a transposition by means of a phase-position map', /, &
@@ -104,7 +108,8 @@ subroutine over52
      go to 6220
 
   case (5)
-6055 write (unit = lunit(6), fmt = 7154)
+     ! 6055
+     write (unit = lunit(6), fmt = 7154)
      write (unit = lunit(6), fmt = 7055) lstat(12)
 7055 format (5x, "'multip' is the multiplicity parameter, read from columns 9-12 of the line-position card.   As such, it must", /, &
           5x, 'be a non-negative integer, with zero or blank given the default value of unity.   But the EMTP has read a value', /, &
@@ -112,7 +117,8 @@ subroutine over52
      go to 6220
 
   case (6)
-6056 write (unit = lunit(6), fmt = 7154)
+     ! 6056
+     write (unit = lunit(6), fmt = 7154)
      write (unit = lunit(6), fmt = 7056) lstat(13), lstat(14), lstat(12)
 7056 format(5x, 'The most-recently-inputted group of r-l-c shunt branches were ', i2,  ' in number, with both ends of number', /, &
           5x, i2, ' of this group connected to the same node number ', i2, '.   Now while such a requested connection', /, &
@@ -122,47 +128,54 @@ subroutine over52
      go to 6220
 
   case (7)
-6057 write (unit = lunit(6), fmt = 7154)
+     ! 6057
+     write (unit = lunit(6), fmt = 7154)
      write (unit = lunit(6), fmt = 7057) lstat(12), lstat(13)
 7057 format (5x, 'Error in cascaded-pi data.  ', /, 5x, 'node ', i4, ' short circuited to node ', i4, '.  One of these nodes should be removed from the circuit.')
      go to 6220
 
   case (8)
-6058 write (unit = lunit(6), fmt = 7154)
+     ! 6058
+     write (unit = lunit(6), fmt = 7154)
      write (unit = lunit(6), fmt = 7058)
 7058 format (5x, "'stop cascade' card missing in referenced cascaded pi section.  This can be corrected by either putting",/, &
           5x, "this card in or removing the 'cascaded pi' card.")
      go to 6220
 
   case (9)
-6059 write (unit = lunit(6), fmt = 7059) lstat(16), bus1
+     ! 6059
+     write (unit = lunit(6), fmt = 7059) lstat(16), bus1
 7059 format (5x,  '3-phase compensation for synchronous machine number ', i2,  ' breaks down.   Terminal bus ', "'", a6, "' ", /, &
           5x, 'already has another element requiring compensation connected to it.   ')
      go to 6220
 
   case (10)
-6060 write (unit = lunit(6), fmt = 7154)
+     ! 6060
+     write (unit = lunit(6), fmt = 7154)
      write (unit = lunit(6), fmt = 7060) lstat(12)
 7060 format (5x, 'Invalid shunt r-l-c node number  ', i3, 'was used.  This number is out of sequence.', /, &
           5x, 'Check connections in this area and renumber nodes.')
      go to 6220
 
   case (11)
-6061 write (unit = lunit(6), fmt = 7061) flstat(15), flstat(16)
+     ! 6061
+     write (unit = lunit(6), fmt = 7061) flstat(15), flstat(16)
 7061 format (5x, 'Switched-inductance element just read has inductance parameters  l1  and  l2  (columns 25-44) punched', /, &
           5x, 'as', e14.3, ' and', e14.3,  ', respectively.   One or both of these are non-positive, which is illegal.   If the', /, &
           5x,  'user wants a zero value, he must punch a small positive number.')
      go to 6220
 
   case (12)
-6062 write (unit = lunit(6), fmt = 7062) flstat(14), flstat(15)
+     ! 6062
+     write (unit = lunit(6), fmt = 7062) flstat(14), flstat(15)
 7062 format (5x, 'Switched-resistance element just read has resistance  r  (columns 15-24) or breakpoint voltage', /, &
           5x, '(columns 35-44) nonpositive, which is illegal.   If the user wants a zero value, he must punch a small positve number.', /, &
           5x,  'Numbers read from the two fields in question are', e13.3, ' and ', e13.3,  ', respectively.')
      go to 6220
 
   case (13)
-6063 write (unit = lunit(6), fmt = 7063)
+     ! 6063
+     write (unit = lunit(6), fmt = 7063)
 7063 format (5x, "Trouble has been encountered during decoding of user's input data.   Had not this very civilized error  ",/, &
           5x, 'message been specially provided, the computer operating system would have performed the termination in its own ',/, &
           5x, 'cursory, inimitably-inscrutable manner.   Most probably, the last data card read carries some erroneous data,   ',/, &
@@ -192,13 +205,15 @@ subroutine over52
      go to 6220
 
   case (14)
-6064 write (unit = lunit(6), fmt = 7064) bus1
+     ! 6064
+     write (unit = lunit(6), fmt = 7064) bus1
 7064 format (5x, 'Switch connectivity error.  Subroutine switch has determined that a loop of closed switches is about to be   ',/, &
           5x, 'created involving bus  "',  a6, '".   Such switch loops are illegal.  ')
      go to 6220
 
   case (15)
-6065 write (unit = lunit(6), fmt = 7065) lstat(14), flstat(15), flstat(16)
+     ! 6065
+     write (unit = lunit(6), fmt = 7065) lstat(14), flstat(15), flstat(16)
 7065 format (5x,  'The last-read data card has been taken by the EMTP to be card number ', i3,  " of the user's frequency-   ",/, &
           5x, "dependent line-constants input.   It is illegal because the frequency, as read from columns 21-30 using 'e' format,   ",/, &
           5x,  'is not greater than that read from the preceding card. The frequency of this card is', e13.4,  ', while that   ',/, &
@@ -207,7 +222,8 @@ subroutine over52
      go to 6220
 
   case (16)
-6066 write (unit = lunit(6), fmt = 7066)
+     ! 6066
+     write (unit = lunit(6), fmt = 7066)
 7066 format (5x, "The user is presently trying to input line constants ('r', 'l', and 'f' fields) for too many frequencies.   ")
      write (unit = lunit(6), fmt = 7166)  lstat(12)
 7166 format (5x,  'The current program dimensioned storage for such points is ', i3,  '.   Does the user really need all of   ',/, &
@@ -218,7 +234,8 @@ subroutine over52
      go to 6220
 
   case (17)
-6067 write (unit = lunit(6), fmt = 7067) lstat(13)
+     ! 6067
+     write (unit = lunit(6), fmt = 7067) lstat(13)
 7067 format (5x, 'To find the near-end weighting function  a2(t) ,     recourse is made to the infinitely-long line.   For time  ',/, &
           5x, "less than the infinite-frequency travel time 'tau', it is the infinite-line response which is actually used.    ",/, &
           5x, "Input parameter  'npinf'  (columns 25-32 of the second misc. data card) specifies the number of points which are   ",/, &
@@ -227,7 +244,8 @@ subroutine over52
      go to 6220
 
   case (18)
-6068 write (unit = lunit(6), fmt = 7068) flstat(14), lstat(15), lstat(13)
+     ! 6068
+     write (unit = lunit(6), fmt = 7068) flstat(14), lstat(15), lstat(13)
 7068 format (5x, 'the number of points which are used to define the weighting functions is controlled (in part) by two misc.   ',/, &
           5x,  "Data parameters.   The first of these is  'rmax'  with value", e12.3,  ", and the second is  'mnum'  with value   ",/, &
           5x, i3, '.   Either these were user-punched numbers, or they are default values built into the EMTP   anyway, these   ',/, &
@@ -240,21 +258,24 @@ subroutine over52
      go to 6220
 
   case (19)
-6069 write (unit = lunit(6), fmt = 7069)
+     ! 6069
+     write (unit = lunit(6), fmt = 7069)
 7069 format (5x, 'The user is presently trying to input i-v points which define his magnetic saturation characteristic.    ',/, &
           5x, 'But he is using too many points to define this curve.   ')
      write (unit = lunit(6), fmt = 7166) lstat(12)
      go to 6220
 
   case (20)
-6070 write (unit = lunit(6), fmt = 7070)
+     ! 6070
+     write (unit = lunit(6), fmt = 7070)
 7070 format (5x, 'This error is most likely due to the computer system library subroutine for the sine function giving a value   ',/, &
           5x, 'greater than unity.   If there were any justice in the world, this trouble would not have arisen.   In any case,   ',/, &
           5x, "the difficulty is probably not the user's fault, so he should go complain to program maintenance about his trouble.    ")
      go to 6220
 
   case (21)
-6071 write (unit = lunit(6), fmt = 7071) lstat(12), flstat(13), flstat(14)
+     ! 6071
+     write (unit = lunit(6), fmt = 7071) lstat(12), flstat(13), flstat(14)
 7071 format (5x, 'The user is presently trying to input i-v points which define his magnetic saturation characteristic.    ',/, &
           5x, 'But he has violated the rule which requires that both voltage and current be strictly monotone-increasing (for    ',/, &
           5x, 'the order of data-card input).   The last-read card (number ', i3,  ' of the characteristic) violates this   ',/, &
@@ -270,7 +291,8 @@ subroutine over52
      go to 6220
 
   case (22)
-6072 write (unit = lunit(6), fmt = 7072) flstat(16)
+     ! 6072
+     write (unit = lunit(6), fmt = 7072) flstat(16)
 7072 format (5x, 'The user has been inputting a type-97 (staircase) time-varying resistance element, and has violated one of  ',/, &
           5x, 'the data rules pertaining there to.   In particular, the last-read data card has a nonpositive value of  ', e13.4, /, &
           5x, 'punched in columns 9-16.   Such a nonpositive resistance for a portion of the time-vs.-resistance characteristic   ',/, &
@@ -278,7 +300,8 @@ subroutine over52
      go to 6220
 
   case (23)
-6073 write (unit = lunit(6), fmt = 7073) lstat(16), bus1
+     ! 6073
+     write (unit = lunit(6), fmt = 7073) lstat(16), bus1
 7073 format (5x, 'The last-read data card has been taken by the EMTP to be a source card, specifying a generator of type ', i2, /, &
           5x,  'located on bus ', "'", a6, "'.   Now for such a source, columns 11-20 are to be punched with the amplitude (for   ",/, &
           5x, 'a type-14 sinusoidal source, this is the peak value).   But the user has punched a zero, or left the field blank.   ',/, &
@@ -291,7 +314,8 @@ subroutine over52
      go to 6220
 
   case (24)
-6074 write (unit = lunit(6), fmt = 7074) flstat(15), lstat(16)
+     ! 6074
+     write (unit = lunit(6), fmt = 7074) flstat(15), lstat(16)
 7074 format (5x, "While solution of this problem could continue, the EMTP has become suspicious of a data 'misunderstanding' on   ",/, &
           5x, "the part of the user.   Note that the termination time of the study ( 'tmax' ) is nonpositive, indicating that   ",/, &
           5x, "only a sinusoidal steady-state solution is desired.   The value of  'tmax'  actually read from columns 9-16 of   ",/, &
@@ -305,7 +329,8 @@ subroutine over52
      go to 6220
 
   case (25)
-6075 write (unit = lunit(6), fmt = 7075)
+     ! 6075
+     write (unit = lunit(6), fmt = 7075)
 7075 format (5x,  'The user has been inputting frequency-dependent line constants to the weighting-function supporting    ',/, &
           5x, 'program, in order to calculate  a1(t)  and  a2(t)  for the zero-sequence mode of a distributed-parameter line.   ')
      write (unit = lunit(6), fmt = 7175) flstat(15)
@@ -323,7 +348,8 @@ subroutine over52
      go to 6220
 
   case (26)
-6076 write (unit = lunit(6), fmt = 7076) lstat(16)
+     ! 6076
+     write (unit = lunit(6), fmt = 7076) lstat(16)
 7076 format (5x, 'The EMTP logic has interpreted the last-read data card to be part of the specification cards for plotted output. ',/, &
           5x, 'But the type-code read from columns 1-2 cannot be accepted.   A value of , i2, 25h was read, which does not   ',/, &
           5x, 'correspond to any of the legitimate existing codes (0, 1, 2       ).   If the card in question really is not a plot card,    ',/, &
@@ -332,7 +358,8 @@ subroutine over52
      go to 6220
 
   case (27)
-6077 write (unit = lunit(6), fmt = 7077) lstat(14), flstat(15), flstat(16)
+     ! 6077
+     write (unit = lunit(6), fmt = 7077) lstat(14), flstat(15), flstat(16)
 7077 format (5x, 'The last-read data card has been taken by the EMTP to be a branch card for conductor number ', i2,  ' of a   ',/, &
           5x, 'distributed-parameter transmission line.   The user is in trouble because of an inconsistent line-length which  ',/, &
           5x, 'he has punched in columns 45-50 of this last-read card.   The first card for this multiphase line carries a length   ',/, &
@@ -344,20 +371,23 @@ subroutine over52
      go to 6220
 
   case (28)
-6078 write (unit = lunit(6), fmt = 7078) flstat(16)
+     ! 6078
+     write (unit = lunit(6), fmt = 7078) flstat(16)
 7078 format (5x, 'The last-read data card is for the first conductor (or mode) of a distributed-parameter transmission line.   ',/, &
           5x, 'The field of columns 45-50 is supposed to be punched with the line length, with a value of ', e13.4,  ' read   ',/, &
           5x, "by the EMTP from the user's card.   Thou shalt not input transmission lines having nonpositive length, good buddy.   ")
      go to 6220
 
   case (29)
-6079 write (unit = lunit(6), fmt = 7079)
+     ! 6079
+     write (unit = lunit(6), fmt = 7079)
 7079 format (5x,  'Since an interactive EMTP version is not, being used, illegal data card shown, before "error" heading must be corrected         ',/, &
           5x, 'after the program stops, and then case, must be re-run.  Too bad (interactive, correction might have been possible).  ')
      call stoptp
 
   case (30)
-6080 write (unit = lunit(6), fmt = 7080) lbus, intinf
+     ! 6080
+     write (unit = lunit(6), fmt = 7080) lbus, intinf
 7080 format (5x, 'Associated with the steady-state phasor solution is a bias applied to node numbers of sources.   The bus tables  ',/, &
           5x,  'are dimensioned at', i6,  ', which is over one third of the largest integer permitted for this program conversion.   ',/, &
           5x,  "The latter figure is stored in variable  'intinf' ,  which for this conversion was given a value of", i6,  '.   The   ',/, &
@@ -366,7 +396,8 @@ subroutine over52
      go to 6220
 
   case (31)
-6081 write (unit = lunit(6), fmt = 7081) flstat(15), flstat(16), tmax, deltat
+     ! 6081
+     write (unit = lunit(6), fmt = 7081) flstat(15), flstat(16), tmax, deltat
 7081 format (5x,  "The user's first miscellaneous data card implies a transient simulation of (in e-field notation)", e15.6,   /, &
           5x, "steps.   This exceeds the limit  'intinf'  for integer numbers for this program conversion of (in e-field notation)", /, &
           1x, e15.6,  '.   The case thus can not be run, because   ',/, &
@@ -378,7 +409,8 @@ subroutine over52
      go to 6220
 
   case (32)
-6082 write (unit = lunit(6), fmt = 7082) lstat(15)
+     ! 6082
+     write (unit = lunit(6), fmt = 7082) lstat(15)
 7082 format (5x, 'The user has overflowed storage within the line-constants supporting program.   For the current program   ',/, &
           5x,  'version, one is limited to cases having not over', i4, ' conductors.   Storage for the arrays in question has   ',/, &
           5x, 'been optimally (and dynamically) allocated so as to use as much of the EMTP core storage as is available.   It thus   ',/, &
@@ -390,7 +422,8 @@ subroutine over52
      go to 6220
 
   case (33)
-6083 write (unit = lunit(6), fmt = 7083) lstat(15)
+     ! 6083
+     write (unit = lunit(6), fmt = 7083) lstat(15)
 7083 format (5x, "For inputting conductor data of a line-constants case, data-field  'xtype'  of columns 17-18 can be punched   ",/, &
           5x, "with a  '4' .   If this be the case, the EMTP expects a specification for the skin-effect calculation to be punched   ",/, &
           5x, "in columns 4-8 (data field  'rtype' ).   But the user has left field  'rtype'  blank (or has punched a zero, which    ",/, &
@@ -401,35 +434,40 @@ subroutine over52
      go to 6220
 
   case (34)
-6084 write (unit = lunit(6), fmt = 7084) lstat(15)
+     ! 6084
+     write (unit = lunit(6), fmt = 7084) lstat(15)
 7084 format (5x, 'The just-printed conductor has geometrical x-y positioning (i.e., horizontal distance and height) which is   ',/, &
           5x,  'identical with that of conductor number', i3,  ' of the sorted input.   Thou shalt not place two or more solid    ',/, &
           5x,  'objects in the same space at the same time, fella.   ')
      go to 6220
 
   case (35)
-6085 write (unit = lunit(6), fmt = 7085) lstat(15)
+     ! 6085
+     write (unit = lunit(6), fmt = 7085) lstat(15)
 7085 format (5x,  'The user has failed to input a conductor for circuit number',  i3,  '.   Remember, circuit numbers must span   ',/, &
           5x, 'the full range of numbers from unity through the highest conductor number, without any gaps (unused numbers) in   ',/, &
           5x,  'between.   Renumber the conductors, and try again.   ')
      go to 6220
 
   case (36)
-6086 write (unit = lunit(6), fmt = 7086) lstat(15), flstat(16), lstat(13), lstat(14)
+     ! 6086
+     write (unit = lunit(6), fmt = 7086) lstat(15), flstat(16), lstat(13), lstat(14)
 7086 format (5x, 'Go see program maintenance about this one, fast.    The case has stopped inside subroutine "redu44" of the line   ',/, &
           5x,  'constants calculation, with diagonal element of row', i3, ' equal to', e14.5,  ", which is less than Hermann's   ",/, &
           5x,  "build-in fixed tolerance of  1.0e-8 .   Parameters  'n' and  'm'  are equal to ", 2i5,  '.'   )
      go to 6220
 
   case (37)
-6087 write (unit = lunit(6), fmt = 7087)
+     ! 6087
+     write (unit = lunit(6), fmt = 7087)
 7087 format (5x,  ' big trouble.   The computer operating system has interrupted emtp execution.   This EMTP solution is hereby fatally',/,  &
           5x,  ' wounded.   If more information about, the interrupt is known, it will be, found immediately preceding the first',/,  &
           5x, ' "error  error ...."  line above.   If this computer system can skip to a following data case, it will (below).  ')
      go to 6220
 
   case (38)
-6088 write (unit = lunit(6), fmt = 7088) lstat(32), nenerg
+     ! 6088
+     write (unit = lunit(6), fmt = 7088) lstat(32), nenerg
 7088 format (5x, 'This is a statistical-overvoltage study, in which all solutions are now completed, and the EMTP is ready to   ',/, &
           5x, 'perform the final statistical processing (calculation of cumulative distribution functions, etc.).   To do this,     ',/, &
           5x,  'the output vectors (',  i3,  ' cells long) for all of the energizations (',  i3, ' in number) must be simultaneously  ',/, &
@@ -454,7 +492,8 @@ subroutine over52
      go to 6220
 
   case (39)
-6089 write (unit = lunit(6), fmt = 7089) flstat(15), flstat(16)
+     ! 6089
+     write (unit = lunit(6), fmt = 7089) flstat(15), flstat(16)
 7089 format (5x, "The last-read card is a switch-card, bearing the key word  'statistics'  in columns 55-64.   The switch is    ",/, &
           5x, 'thus a circuit-breaker pole, for which the closing time is to be a random variable.   But either the specified   ',/, &
           5x, "variable mean (punched in field  'tclose' ,   columns 15-24       ) or the standard deviation (field  'topen' ,  columns   ",/, &
@@ -466,7 +505,8 @@ subroutine over52
      go to 6220
 
   case (40)
-6090 write (unit = lunit(6), fmt = 7090) flstat(14), flstat(15)
+     ! 6090
+     write (unit = lunit(6), fmt = 7090) flstat(14), flstat(15)
 7090 format (5x, 'The EMTP has just begun reading data for the conversion of an rms current-voltage saturation curve into   ',/, &
           5x, "current-flux form.   But illegal values for either  'vbase'  or  'pbase'  have been read from the last-read data  ",/, &
           5x, 'card (columns 9-16  and  17-24, respectively).   Both of these fields must be punched with positive numbers.   ',/, &
@@ -492,7 +532,10 @@ subroutine err87 (lstat, flstat, lunit6)
   !  dimension lstat(1), flstat(1)
   !
   write (unit = lunit6, fmt = 7087)
-7087 format (5x, "Has part of the interactive crt plotting or  'replot'  features of the EMTP,  plot data points are stored on   ", /, 5x, "disk as a  'permanent file'  (as opposed to temporary, scratch storage, which is used for every emtp run).   It   ", /, 5x, 'is the operation of internally cataloging this data file as a permanent file, inside the EMTP, which has gotten   ', /, 5x, "the EMTP into trouble with the computer operating system (otherwise affectionately known as 'bigger big brother').")
+7087 format (5x, "Has part of the interactive crt plotting or  'replot'  features of the EMTP,  plot data points are stored on   ", /, &
+          5x, "disk as a  'permanent file'  (as opposed to temporary, scratch storage, which is used for every emtp run).   It   ", /, &
+          5x, 'is the operation of internally cataloging this data file as a permanent file, inside the EMTP, which has gotten   ', /, &
+          5x, "the EMTP into trouble with the computer operating system (otherwise affectionately known as 'bigger big brother').")
   return
 end subroutine err87
 

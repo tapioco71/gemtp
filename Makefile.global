@@ -70,23 +70,19 @@ INCLUDES_PATH=${ROOT}/includes
 LIBRARIES_PATH=${ROOT}/libraries
 
 # Assembler flags.
-AS_FLAGS=	-Wall			\
-		-al			\
+AS_FLAGS=	-al			\
 		-c
 
 # gcc flags.
-CC_FLAGS=	-Wall			\
-		-c	  		\
+CC_FLAGS=	-c	  		\
 		-std=c99
 
 # g++ flags.
-CPP_FLAGS=	-Wall			\
-		-I${INCLUDES_PATH}	\
+CPP_FLAGS=	-I${INCLUDES_PATH}	\
 		-c
 
 # gfortran flags.
 FORTRAN_FLAGS=	-O0			\
-		-Wall			\
 		-std=gnu		\
 		-falign-commons		\
 		-fcheck=all		\
@@ -103,7 +99,6 @@ FORTRAN_FLAGS=	-O0			\
 #		-fmax-stack-var-size=100000000	\
 
 F90_FLAGS=	-O0				\
-		-Wall				\
 		-cpp				\
 		-fPIC				\
 		-ffree-form			\
@@ -141,6 +136,14 @@ F90_FLAGS=	-O0				\
 		-DWITH_OVER55			\
 		-DSAVE_TO_DISK			\
 		-c
+
+ifneq (${WARNING},)
+AS_FLAGS+=-W${WARNING}
+C_FLAGS+=-W${WARNING}
+CPP_FLAGS+=-W${WARNING}
+FORTRAN_FLAGS+=-W${WARNING}
+F90_FLAGS+=-W${WARNING}
+endif
 
 # objdump most common flags.
 OBJDUMP_FLAGS=	-h	\

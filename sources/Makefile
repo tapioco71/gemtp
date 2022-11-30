@@ -38,6 +38,9 @@ COMPILER=gcc
 # Verbose flag.
 VERBOSE=
 
+# All warnings flag.
+WARNING=all
+
 # Debug flag.
 DEBUG=1
 
