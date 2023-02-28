@@ -118,7 +118,7 @@ contains
     kpen(2) = 0
     n4 = location (narray)
     write (unit = lunit(6), fmt = 5831) n1, n2, n3, kburro, n4
-5831 format (/, " Top of  'tapsav'., '      n1      n2      n3  kburro              n4", /, 18x, 4i8, i16)
+5831 format (/, ' Top of  "tapsav".      n1      n2      n3  kburro              n4', /, 18x, 4i8, i16)
     !     Following check normally sends VAX EMTP to 6327 (disk is
     !     only wanted for table saving within a simulation for
     !     test purposes):
